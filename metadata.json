@@ -1,0 +1,6 @@
+{
+  "name": "Haveli Restaurant And Banquet Hall",
+  "description": "Premium multiseason multi-cuisine royal restaurant and banquet hall in Markapur featuring smart reservations and logs tracking",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "booking": {
+      "title": "Booking",
+      "description": "User reservations and home delivery orders.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "description": "Unique Royal Token code." },
+        "name": { "type": "string", "description": "Customer Full Name." },
+        "phone": { "type": "string", "description": "Customer Phone Number." },
+        "type": { "type": "string", "enum": ["dining", "banquet", "delivery"], "description": "Booking/Order modality." },
+        "date": { "type": "string", "description": "Selected Reservation/Order Date." },
+        "timeSlot": { "type": "string", "description": "Hour Slot selection." },
+        "guestsCount": { "type": "number", "description": "Number of covers/heads." },
+        "address": { "type": "string", "description": "Delivery address details." },
+        "orderDishes": { "type": "string", "description": "Dishes chosen for cart order." },
+        "paymentOption": { "type": "string", "description": "COD / Card details choice." },
+        "status": { "type": "string", "enum": ["Confirmed", "Out for Delivery", "Completed"], "description": "Live task lifecycle status." },
+        "notes": { "type": "string", "description": "Ancillary customer instructions." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." }
+      },
+      "required": ["code", "name", "phone", "type", "date", "timeSlot"]
+    },
+    "menuCategory": {
+      "title": "MenuCategory",
+      "description": "A named culinary category grouping dynamic menu dishes.",
+      "type": "object",
+      "properties": {
+        "categoryName": { "type": "string", "description": "Culinary category identification." },
+        "items": { "type": "array", "description": "List of dishes contained." }
+      },
+      "required": ["categoryName", "items"]
+    }
+  },
+  "firestore": {
+    "/bookings/{bookingId}": {
+      "schema": "booking",
+      "description": "Active reservations and royal passes collection."
+    },
+    "/menuCategories/{categoryId}": {
+      "schema": "menuCategory",
+      "description": "Culinary menu categories collection."
+    }
+  }
+}

@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitive Definitions
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Validation helper corresponding to our booking entity schema
+    function isValidBooking(data) {
+      return data.keys().hasAll(['code', 'name', 'phone', 'type', 'date', 'timeSlot'])
+        && data.code is string && data.code.size() <= 64
+        && data.name is string && data.name.size() <= 128
+        && data.phone is string && data.phone.size() <= 32
+        && data.type is string && (data.type == "dining" || data.type == "banquet" || data.type == "delivery");
+    }
+
+    // Match block for Bookings
+    match /bookings/{bookingId} {
+      allow read: if true; // Open reading allows guests to verify and fetch active passes
+      allow create: if isValidId(bookingId) && isValidBooking(incoming()) && incoming().code == bookingId;
+      allow update, delete: if isValidId(bookingId) && isValidBooking(incoming());
+    }
+
+    // Match block for Menu Categories metadata
+    match /menuCategories/{categoryId} {
+      allow read: if true; // Open catalog for all customers
+      allow write: if isSignedIn(); // Restricted strictly with authenticated tokens
+    }
+  }
+}

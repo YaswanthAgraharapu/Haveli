@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "Cinzel", Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Custom royal branding colors based on the photo provided */
+  --color-brand-wine: #6c0e16;      /* Rich Royal Burgundy from sign board */
+  --color-brand-wine-dark: #3f050a; /* Dark velvet burgundy shading */
+  --color-brand-wine-light: #8f1a23;/* Vibrant highlight crimson */
+  --color-brand-gold: #EAC775;       /* Saffron gold border and text accent */
+  --color-brand-gold-dark: #ccaa58;  /* Antique heavy gold */
+  --color-brand-cream: #FAF6F0;      /* Warm off-white sand base */
+}
+
+/* Elegant scrollbar details */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF6F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #6c0e16;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f050a;
+}
