@@ -5,15 +5,42 @@
 
 import React, { useState, useEffect } from "react";
 import { menuCategories, MenuCategory, MenuItem } from "../menuData";
-import { Search, Flame, CirclePlus, Coffee, LayoutGrid, FileText, Check } from "lucide-react";
+import { Search, Flame, CirclePlus, Coffee, LayoutGrid, FileText, Check, Star, Sparkles, Filter, Leaf } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+
+// Image maps matching royal Indian culinary offerings
+const CATEGORY_IMAGE_MAP: Record<string, string> = {
+  "TANDOORI STARTERS": "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80",
+  "HYDERABADI DUM BIRYANI": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&q=80",
+  "VEGETARIAN DELIGHT DISHES": "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=600&q=80",
+  "CHEF'S NON-VEG SPECIAL CURRIES": "https://images.unsplash.com/photo-1621979087428-255c468e2f8d?w=600&q=80",
+  "NAUGHTY SHAKES & COOL BEVERAGES": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&q=80",
+  "ROYAL INDIAN DESSERTS & SWEETS": "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=600&q=80"
+};
+
+const DEFAULT_DISH_FALLBACK = "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80";
+
+const isVegDish = (item: MenuItem, categoryName: string): boolean => {
+  const cat = categoryName.toLowerCase();
+  const name = item.name.toLowerCase();
+  if (cat.includes("non-veg") || cat.includes("chicken") || cat.includes("mutton") || cat.includes("fish") || cat.includes("egg") || cat.includes("lamb")) {
+    return false;
+  }
+  const nonVegKeywords = ["chicken", "mutton", "egg", "fish", "prawn", "crab", "keema", "kabab", "tikka", "lollipop", "lolypop", "wings", "drumstick", "tandoori chicken", "non-veg", "non veg", "prawns"];
+  for (const keyword of nonVegKeywords) {
+    if (name.includes(keyword)) {
+      return false;
+    }
+  }
+  return true;
+};
 
 export default function MenuSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [menu, setMenu] = useState<MenuCategory[]>(menuCategories);
 
-  // Sync menu with server
+  // Sync menu with server logs dynamically
   const fetchMenuLive = async () => {
     try {
       const res = await fetch("/api/menu");
@@ -28,24 +55,21 @@ export default function MenuSection() {
 
   useEffect(() => {
     fetchMenuLive();
-    const interval = setInterval(fetchMenuLive, 3000);
+    const interval = setInterval(fetchMenuLive, 4000);
     return () => clearInterval(interval);
   }, []);
 
-  // Filter out distinct category names
   const categoriesList = ["All", ...menu.map(c => c.categoryName)];
 
-  // Helper filter logic
+  // Helper matching items
   const getFilteredItems = (): { categoryName: string; items: MenuItem[] }[] => {
     let results: { categoryName: string; items: MenuItem[] }[] = [];
 
     menu.forEach(cat => {
-      // Direct category filter match
       if (selectedCategory !== "All" && cat.categoryName !== selectedCategory) {
         return;
       }
 
-      // Filter individual items
       const matchedItems = cat.items.filter(item => {
         const matchesQuery = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                              (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -67,7 +91,6 @@ export default function MenuSection() {
 
   const handleQuickCategory = (cat: string) => {
     setSelectedCategory(cat);
-    // Smooth scroll down to internal anchor
     const el = document.getElementById("menu_content_anchor");
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -75,166 +98,178 @@ export default function MenuSection() {
   };
 
   return (
-    <div id="menu_showcase_section" className="py-16 bg-[#FAF6F0]/40 border-b border-[#EAC775]/25 relative scroll-mt-6">
+    <div id="menu_showcase_section" className="py-20 relative overflow-hidden text-left scroll-mt-6">
       
-      {/* Visual background accents */}
-      <div className="absolute top-10 right-10 w-24 h-24 bg-amber-200/10 rounded-full blur-xl pointer-events-none"></div>
+      {/* Background decoration */}
+      <div className="absolute top-1/4 right-[5%] w-96 h-96 bg-[#4A0E1A]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 left-[5%] w-80 h-80 bg-[#D4AF37]/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 space-y-12 relative z-10">
         
-        {/* Curated menu title */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10 pb-5 border-b border-gray-250/25">
-          <div>
-            <div className="flex items-center gap-1.5 text-[#EAC775] mb-2 font-mono text-xs font-semibold uppercase tracking-widest">
-              <Coffee className="w-5 h-5" />
-              <span>Premium Dining Registry</span>
+        {/* Luxury Section Header */}
+        <div className="border-b border-slate-800 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-[#4A0E1A]/50 to-stone-900 border border-[#D4AF37]/20 rounded-full text-[10px] font-mono tracking-widest text-[#D4AF37] uppercase">
+              <Coffee className="w-3.5 h-3.5" />
+              <span>Gourmet Catalogue</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-serif text-[#0b1528] tracking-wide">
-              Traditional Multi-Cuisine Menu
+            <h2 className="text-3xl sm:text-5xl font-serif text-white font-black tracking-wide">
+              Traditional Taste Registry
             </h2>
-            <p className="text-sm text-gray-500 mt-1 font-sans">
-              Corrected OCR specifications precisely registered to protect authentic pricing. Use Search to filter.
+            <p className="text-xs text-slate-400 font-sans max-w-xl">
+              Each recipe has been preserved over decades, curated with pure hand-pounded spices, cold-pressed mustard oils, and clinical hygiene standards.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <a 
-              href="#seo_analyst_section"
-              className="flex items-center gap-1.5 bg-slate-900/5 hover:bg-[#EAC775]/25 text-[#0b1528] px-4.5 py-2.5 rounded-lg border border-[#EAC775]/25 text-xs font-mono font-bold transition"
-            >
-              <FileText className="w-4 h-4" /> Download Markdown/JSON Menu
-            </a>
-          </div>
-        </div>
-
-        {/* Global Toolbar: Search bar & Quick actions */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EAC775]/20 shadow-md mb-8 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-          
-          {/* Search bar */}
-          <div className="relative md:col-span-8">
-            <input
-              type="text"
-              placeholder="Search dishes (e.g. Ulavacharu, Mutton Biryani, Cashewnut paneer, lassi...)"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full text-xs sm:text-sm p-3.5 pl-10 rounded-xl border border-gray-200 focus:border-[#EAC775] focus:outline-none focus:ring-1 focus:ring-[#EAC775] transition"
-            />
-            <Search className="w-4.5 h-4.5 text-[#EAC775] absolute left-3.5 top-4 pointer-events-none" />
-          </div>
-
-          {/* Quick Clear controls */}
-          <div className="flex gap-2 justify-end md:col-span-4">
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="text-xs text-red-600 hover:underline px-3 py-1 bg-red-50 border border-red-150 rounded-lg shrink-0"
-              >
-                Clear Search
-              </button>
-            )}
-            <span className="text-xs font-mono text-gray-400 bg-slate-50 border px-3.5 py-2.5 rounded-lg">
-              Found: {filteredData.reduce((acc, c) => acc + c.items.length, 0)} Items
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-mono text-slate-500 bg-black/45 border border-slate-800 px-4 py-2.5 rounded-xl uppercase font-bold">
+              ⚡ LIVE COUNTER: {filteredData.reduce((acc, c) => acc + c.items.length, 0)} DISHES
             </span>
           </div>
         </div>
 
-        {/* Categories Pills bar (H-Scrolling list) */}
-        <div className="mb-10 overflow-x-auto pb-3 flex items-center gap-2 px-1 select-none whitespace-nowrap scrollbar-thin">
-          {categoriesList.map(catName => (
+        {/* Categories Carousel */}
+        <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-none select-none">
+          {categoriesList.map((catName) => (
             <button
               key={catName}
               onClick={() => setSelectedCategory(catName)}
-              className={`px-4.5 py-2.5 rounded-xl text-xs font-semibold tracking-wider transition ${
+              className={`p-3 px-6 rounded-2xl text-[10px] font-mono uppercase tracking-widest shrink-0 border transition-all duration-300 cursor-pointer ${
                 selectedCategory === catName
-                  ? "bg-[#0b1528] text-[#FAF6F0] shadow-md border-b-2 border-[#EAC775]"
-                  : "bg-white text-gray-600 border border-slate-200 hover:bg-[#FAF6F0] hover:text-[#0b1528]"
+                  ? "bg-gradient-to-r from-[#D4AF37] to-[#A3791E] text-black border-[#D4AF37] font-extrabold shadow-md transform scale-[1.01]"
+                  : "bg-black/55 hover:bg-white/5 text-slate-400 hover:text-white border-white/5"
               }`}
             >
-              {catName === "All" ? "🏡 Complete Catalog" : catName}
+              {catName}
             </button>
           ))}
         </div>
 
-        {/* Dynamic Items Listing Grid view (Bento Style card templates) */}
-        <div id="menu_content_anchor" className="space-y-12 scroll-mt-6">
-          <AnimatePresence mode="popLayout">
-            {filteredData.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed text-gray-400"
+        {/* High-End Glass Search bar */}
+        <div id="menu_content_anchor" className="glass-panel p-5 rounded-3xl border border-white/10 shadow-xl bg-black/45">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search dishes (e.g. Biryani, Ginger chicken, Kaju paneer, Lassi...)"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full text-xs sm:text-sm p-4 pl-12 rounded-2xl bg-white/5 border border-slate-800 text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition font-sans"
+            />
+            <Search className="w-5 h-5 text-[#D4AF37] absolute left-4 top-4.5 pointer-events-none" />
+            
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="absolute right-4 top-3.5 bg-red-950/80 border border-red-500/20 text-red-300 hover:text-white px-3 py-1 rounded-lg text-[10px] font-mono uppercase tracking-wider"
               >
-                <div className="text-3xl mb-2">🍽️</div>
-                <h4 className="text-base text-gray-700 font-serif">No matches found for your search.</h4>
-                <p className="text-xs mt-1 leading-normal max-w-sm mx-auto">Try typing another recipe, or select "Complete Catalog" to reset all categories.</p>
-              </motion.div>
-            ) : (
-              filteredData.map((cat, catIdx) => (
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: catIdx * 0.04 }}
-                  key={cat.categoryName}
-                  className="space-y-4"
-                >
-                  {/* Category Title Header */}
-                  <div className="flex items-center gap-3 border-l-4 border-[#EAC775] pl-3">
-                    <h3 className="text-xl font-serif text-[#0b1528] font-bold tracking-wide">
-                      {cat.categoryName}
-                    </h3>
-                    <span className="text-[10px] font-mono text-gray-400 bg-white border border-gray-200 rounded-full px-2.5 py-0.5">
-                      {cat.items.length} items
-                    </span>
-                  </div>
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
 
-                  {/* Gri layout of individual menu cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {cat.items.map((item, itemIdx) => (
-                      <div
-                        key={`${item.name}-${itemIdx}`}
-                        className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 hover:border-[#EAC775]/50 hover:shadow-lg transition-all duration-300 flex justify-between items-start gap-4 shadow-sm relative overflow-hidden group"
-                      >
-                        {item.isPopular && (
-                          <div className="absolute top-0 right-0 bg-[#0b1528] text-[#EAC775] text-[8px] font-bold font-mono uppercase tracking-widest px-2 py-1 rounded-bl border-l border-b border-[#EAC775]/20 animate-pulse flex items-center gap-1">
-                            <Flame className="w-3 h-3 text-[#EAC775] fill-[#EAC775]" /> Star Choice
-                          </div>
-                        )}
-
-                        <div className="space-y-1 text-left">
-                          <h4 className="font-serif font-bold text-[#0b1528] text-base leading-tight">
-                            {item.name}
-                          </h4>
-                          
-                          <p className="text-xs text-gray-500 leading-relaxed font-sans max-w-sm">
-                            {item.description || "Freshly simmered multi-cuisine delicacy featuring local herbs and fine culinary standards."}
-                          </p>
-
-                          <div className="flex items-center gap-2 pt-1">
-                            <span className="text-[10px] font-mono uppercase text-[#EAC775] font-semibold bg-[#FAF6F0] px-2 py-0.5 rounded border border-[#EAC775]/20">
-                              {cat.categoryName === "Indian Breads" || cat.categoryName === "Beverages" ? "Vegetarian" : cat.categoryName.includes("Veg") && !cat.categoryName.includes("Non-Veg") ? "Vegetarian" : "Non-Vegetarian"}
-                            </span>
-                            <span className="text-[10px] font-mono text-slate-400">Markapur Cuisine</span>
-                          </div>
+        {/* Menu Listings */}
+        <div className="space-y-16">
+          <AnimatePresence mode="wait">
+            {filteredData.length > 0 ? (
+              filteredData.map((catGroup) => {
+                const headImage = CATEGORY_IMAGE_MAP[catGroup.categoryName.toUpperCase()] || DEFAULT_DISH_FALLBACK;
+                
+                return (
+                  <motion.div
+                    key={catGroup.categoryName}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="space-y-8 text-left"
+                  >
+                    
+                    {/* Category Title Banner */}
+                    <div className="relative h-40 rounded-[28px] overflow-hidden border border-white/5 flex items-end p-6 group">
+                      <img 
+                        src={headImage} 
+                        alt={catGroup.categoryName} 
+                        className="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-102 transition duration-[5s]" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#060608] via-[#060608]/40 to-transparent" />
+                      
+                      <div className="relative z-10 flex items-center justify-between w-full">
+                        <div className="space-y-1">
+                          <span className="text-[9px] font-mono text-[#D4AF37] tracking-[0.3em] uppercase block font-bold">Category Group</span>
+                          <h3 className="text-xl sm:text-3xl font-serif text-white font-heavy">{catGroup.categoryName}</h3>
                         </div>
-
-                        {/* Cost tags */}
-                        <div className="text-right shrink-0 flex flex-col items-end justify-between h-full pt-1.5">
-                          <span className="text-[#0b1528] font-mono font-bold text-base bg-[#FAF6F0] hover:bg-[#EAC775]/25 border border-[#EAC775]/25 px-3 py-1 rounded-xl transition">
-                            ₹{item.price}
-                          </span>
-                          <span className="text-[9px] font-mono text-gray-400 mt-2 block">Prices Exclude Tax</span>
-                        </div>
+                        <span className="text-[10px] font-mono text-slate-400 bg-black/60 border border-white/5 px-3 py-1.5 rounded-lg font-bold">
+                          {catGroup.items.length} OPTIONS AVAILABLE
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))
+                    </div>
+
+                    {/* Category Menu Items Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {catGroup.items.map((item, itemIdx) => {
+                        const fallbackUrl = headImage;
+                        return (
+                          <div 
+                            key={item.name + itemIdx}
+                            className="glass-panel p-5 rounded-3xl border border-white/5 hover:border-[#D4AF37]/25 glass-card-hover text-left flex flex-col justify-between space-y-4"
+                          >
+                            <div className="space-y-3">
+                              {/* Small thumb tag */}
+                              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative border border-white/5">
+                                <img 
+                                  src={fallbackUrl} 
+                                  alt={item.name} 
+                                  className="w-full h-full object-cover bg-stone-900" 
+                                />
+                                {(() => {
+                                  const isVeg = isVegDish(item, catGroup.categoryName);
+                                  return (
+                                    <span className={`absolute top-3 left-3 px-2.5 py-1 text-[8px] font-mono font-bold uppercase rounded-md border ${
+                                      isVeg 
+                                        ? "bg-emerald-950/80 text-emerald-400 border-emerald-500/20" 
+                                        : "bg-red-950/80 text-red-400 border-red-500/20"
+                                    }`}>
+                                      {isVeg ? "🟢 VEGETARIAN" : "🔴 NON-VEGETARIAN"}
+                                    </span>
+                                  );
+                                })()}
+                              </div>
+
+                              <div className="space-y-1">
+                                <cite className="not-italic text-sm font-serif font-bold text-white block">{item.name}</cite>
+                                <p className="text-[11px] text-slate-400 font-sans leading-relaxed min-h-[32px] line-clamp-2">
+                                  {item.description || "Traditional Mughal formula, curated with hand-ground parameters."}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* footer of the card */}
+                            <div className="border-t border-slate-900 pt-3 flex items-center justify-between">
+                              <span className="text-xs font-mono text-[#D4AF37] font-semibold">₹ {item.price}</span>
+                              <span className="text-[9px] text-slate-500 font-mono tracking-wider font-semibold">ESTD. OWNER VALUE</span>
+                            </div>
+
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                  </motion.div>
+                );
+              })
+            ) : (
+              <div className="glass-panel p-16 rounded-[32px] border border-white/5 text-center text-slate-400 space-y-3 max-w-lg mx-auto">
+                <Leaf className="w-10 h-10 text-slate-600 mx-auto" />
+                <p className="text-sm font-serif font-bold text-white">No Matched Gastronomy Found</p>
+                <p className="text-xs text-slate-500">We could not match any recipes on the search parameters. Please try clean keywords like 'Biryani' or 'Tandoor' specials.</p>
+              </div>
             )}
           </AnimatePresence>
         </div>
 
       </div>
+
     </div>
   );
 }

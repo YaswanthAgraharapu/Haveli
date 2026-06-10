@@ -3,17 +3,37 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DashboardView from "./components/DashboardView";
 import MenuSection from "./components/MenuSection";
 import BookingSystem from "./components/BookingSystem";
 import AdminSuite from "./components/AdminSuite";
 import BrandLogo from "./components/BrandLogo";
 import { GOOGLE_RATING, RESTAURANT_NAME } from "./menuData";
-import { UtensilsCrossed, ShieldAlert, Award, Eye, LogOut, Heart } from "lucide-react";
+import { UtensilsCrossed, ShieldAlert, Award, Eye, LogOut, Heart, Compass, Sparkles, MapPin, Phone, MessageSquare } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "menu" | "booking" | "admin">("dashboard");
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Monitor cursor coordination to feed the spotlight background gradient!
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        setCoords({ x, y });
+        containerRef.current.style.setProperty("--mouse-x", `${x}px`);
+        containerRef.current.style.setProperty("--mouse-y", `${y}px`);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   const handleNavigate = (tab: "dashboard" | "menu" | "booking") => {
     setActiveTab(tab);
@@ -21,161 +41,232 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F0] text-gray-800 font-sans flex flex-col justify-between selection:bg-brand-gold selection:text-brand-wine-dark">
-      
-      {/* 1. SEAMLESS NAVIGATION HEADER BAR */}
-      <header className="sticky top-0 z-40 bg-linear-to-r from-brand-wine-dark via-brand-wine to-brand-wine-dark border-b border-brand-gold/25 shadow-lg select-none">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div 
+      ref={containerRef}
+      className="min-h-screen bg-[#060608] text-slate-100 font-sans flex flex-col justify-between selection:bg-[#D4AF37] selection:text-black relative overflow-hidden"
+    >
+      {/* 1. DYNAMIC RADIAL CURSOR FIELD BACKDROP */}
+      <div 
+        className="absolute inset-0 spotlight-mask pointer-events-none z-0"
+        style={{
+          transition: "background 0.05s ease"
+        }}
+      />
+
+      {/* Decorative ambient blurred nodes */}
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-[#4A0E1A]/20 to-transparent blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-[#D4AF37]/5 to-transparent blur-[140px] pointer-events-none" />
+
+      {/* 2. GLASS TRANSLUCENT STICKY COMMISSION HEADER */}
+      <header className="sticky top-0 z-50 glass-panel border-b border-[#D4AF37]/10 shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-5 relative z-10">
           
-          {/* Logo Brand Accents */}
-          <div 
+          {/* Brand Monogram Redesign */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             onClick={() => handleNavigate("dashboard")} 
-            className="cursor-pointer hover:opacity-90 transition shrink-0"
+            className="cursor-pointer hover:opacity-95 transition-all duration-300 shrink-0"
           >
             <BrandLogo variant="horizontal" iconSize="sm" />
-          </div>
+          </motion.div>
 
-          {/* Quick Page Jump Links */}
-          <nav className="flex items-center flex-wrap gap-1.5 md:gap-2">
+          {/* Luxury Tab Navigation list */}
+          <nav className="flex items-center flex-wrap justify-center gap-1.5 md:gap-3 p-1 rounded-2xl bg-black/45 border border-white/5">
             <button
-              onClick={() => { handleNavigate("dashboard"); }}
-              className={`p-2.5 px-3.5 rounded-xl text-xs uppercase tracking-wider font-semibold transition cursor-pointer ${
-                activeTab === "dashboard" ? "bg-brand-gold text-brand-wine-dark shadow-sm font-extrabold" : "text-brand-cream/80 hover:text-white hover:bg-white/5"
+              onClick={() => handleNavigate("dashboard")}
+              className={`relative px-4 py-2 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 cursor-pointer ${
+                activeTab === "dashboard" 
+                  ? "bg-gradient-to-r from-[#D4AF37] to-[#A3791E] text-black font-extrabold shadow-[0_4px_12px_rgba(212,175,55,0.3)]" 
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              🏰 Haveli Dashboard
+              🏰 HAVELI SUITE
             </button>
+
             <button
-              onClick={() => { handleNavigate("menu"); }}
-              className={`p-2.5 px-3.5 rounded-xl text-xs uppercase tracking-wider font-semibold transition cursor-pointer ${
-                activeTab === "menu" ? "bg-brand-gold text-brand-wine-dark shadow-sm font-extrabold" : "text-brand-cream/80 hover:text-white hover:bg-white/5"
+              onClick={() => handleNavigate("menu")}
+              className={`relative px-4 py-2 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 cursor-pointer ${
+                activeTab === "menu" 
+                  ? "bg-gradient-to-r from-[#D4AF37] to-[#A3791E] text-black font-extrabold shadow-[0_4px_12px_rgba(212,175,55,0.3)]" 
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              🍽️ Food Menu
+              🍽️ ROYAL MENU
             </button>
+
             <button
-              onClick={() => { handleNavigate("booking"); }}
-              className={`p-2.5 px-3.5 rounded-xl text-xs uppercase tracking-wider font-semibold transition cursor-pointer ${
-                activeTab === "booking" ? "bg-brand-gold text-brand-wine-dark shadow-sm font-extrabold" : "text-brand-cream/80 hover:text-white hover:bg-white/5"
+              onClick={() => handleNavigate("booking")}
+              className={`relative px-4 py-2 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 cursor-pointer ${
+                activeTab === "booking" 
+                  ? "bg-gradient-to-r from-[#D4AF37] to-[#A3791E] text-black font-extrabold shadow-[0_4px_12px_rgba(212,175,55,0.3)]" 
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              🎫 Online Bookings
+              🎫 BOOK SEATS
             </button>
-            {/* Owner Suite tab button */}
+
+            {/* Separator */}
+            <div className="h-4 w-[1px] bg-white/10 mx-1 hidden sm:block"></div>
+
+            {/* Admin trigger */}
             <button
-              onClick={() => { setActiveTab("admin"); }}
-              className={`p-2.5 px-2.5 rounded-xl text-xs font-mono uppercase transition cursor-pointer flex items-center gap-1 ${
-                activeTab === "admin" ? "bg-red-700 text-white" : "text-red-400 hover:bg-red-950 border border-red-900/40"
+              onClick={() => setActiveTab("admin")}
+              className={`px-3 py-2 rounded-xl text-[10px] font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer flex items-center gap-1.5 border ${
+                activeTab === "admin" 
+                  ? "bg-[#7E1C2E] text-white border-red-500/50 shadow-[0_4px_10px_rgba(126,28,46,0.3)]" 
+                  : "text-red-400 hover:text-red-300 hover:bg-red-950/20 border-red-900/30"
               }`}
-              title="Separate Admin Access & Booking Logs"
+              title="Restricted Staff Operations Panel"
             >
-              <ShieldAlert className="w-3.5 h-3.5" /> Admin Login
+              <ShieldAlert className="w-3.5 h-3.5" /> Staff
             </button>
           </nav>
 
         </div>
       </header>
 
-      {/* 2. DYNAMIC WORKSPACE VIEW */}
-      <main className="flex-grow">
+      {/* 3. COHESIVE ANIMATED WORKSPACE VIEW */}
+      <main className="flex-grow relative z-10">
         
-        {/* VIEW 1: MAIN CUSTOMER LANDING PAGE */}
-        {activeTab === "dashboard" && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-            <DashboardView onNavigate={handleNavigate} onAdminClick={() => setActiveTab("admin")} />
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {/* VIEW 1: HOME PAGE DASHBOARD */}
+          {activeTab === "dashboard" && (
+            <motion.div 
+              key="dashboard"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12"
+            >
+              <DashboardView onNavigate={handleNavigate} onAdminClick={() => setActiveTab("admin")} />
+            </motion.div>
+          )}
 
-        {/* VIEW 2: FOOD MENU SHOWCASE */}
-        {activeTab === "menu" && (
-          <MenuSection />
-        )}
+          {/* VIEW 2: FOOD MENU */}
+          {activeTab === "menu" && (
+            <motion.div 
+              key="menu"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <MenuSection />
+            </motion.div>
+          )}
 
-        {/* VIEW 3: ONLINE BOOKING SYSTEM */}
-        {activeTab === "booking" && (
-          <BookingSystem />
-        )}
+          {/* VIEW 3: BOOKINGS */}
+          {activeTab === "booking" && (
+            <motion.div 
+              key="booking"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <BookingSystem />
+            </motion.div>
+          )}
 
-
-        {/* VIEW 5: ADMINISTRATIVE ACCESS SUITE (Secure table logs, day-specials settings) */}
-        {activeTab === "admin" && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="mb-6 flex justify-between items-center bg-white p-4 rounded-xl border">
-              <span className="text-xs font-mono text-gray-500">Currently viewing: <strong className="text-red-700">Staff Control Panel</strong></span>
-              <button 
-                onClick={() => setActiveTab("dashboard")}
-                className="text-xs font-mono font-bold text-blue-700 hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                <Eye className="w-3.5 h-3.5" /> Return to Customer site
-              </button>
-            </div>
-            <AdminSuite />
-          </div>
-        )}
-
-
+          {/* VIEW 4: CODE ADMIN CRITICAL RECOVERY */}
+          {activeTab === "admin" && (
+            <motion.div 
+              key="admin"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+            >
+              <div className="mb-6 flex justify-between items-center glass-panel p-4 rounded-2xl border border-[#D4AF37]/15">
+                <span className="text-xs font-mono text-slate-400">Security Gate: <strong className="text-[#D4AF37] font-mono">STAFF SUITE</strong></span>
+                <button 
+                  onClick={() => setActiveTab("dashboard")}
+                  className="text-xs font-mono font-bold text-[#D4AF37] hover:text-[#FFF2C2] hover:underline flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <Eye className="w-3.5 h-3.5" /> Return to Customer site
+                </button>
+              </div>
+              <AdminSuite />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </main>
 
-      {/* 3. SOLID HERITAGE FOOTER */}
-      <footer className="bg-brand-wine-dark text-brand-cream/80 py-12 border-t border-brand-gold/20 select-none font-sans">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      {/* 4. SOLID ULTRA-PREMIUM HOSPITALITY FOOTER */}
+      <footer className="relative bg-gradient-to-t from-[#060608] to-[#120509] text-gray-400 py-16 border-t border-[#D4AF37]/15 select-none font-sans overflow-hidden">
+        {/* Subtle decorative linear reflection */}
+        <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/45 to-transparent"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
           
-          {/* Brand description / rating */}
-          <div className="md:col-span-2 space-y-4 text-left">
-            <div className="flex items-center gap-2">
+          {/* Brand Columns */}
+          <div className="md:col-span-2 space-y-6 text-left">
+            <div className="flex items-center gap-3">
               <BrandLogo variant="horizontal" iconSize="sm" />
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-md">
-              Combining grand Royal Mughal aesthetic values with rigorous culinary practices. Built around bespoke dining corners, elegant soundproof architectures, and highway comfort configurations.
+            <p className="text-xs text-slate-400 leading-relaxed max-w-md">
+              Haveli Banquet Hall And Restaurant represents Markapur's zenith of culinary luxury. From our state-of-the-art gold & royal burgundy acoustics to hand-ground spice reserves, we present fine hospitality comparable with 5-star heritage properties.
             </p>
-            <div className="flex items-center gap-1.5 text-xs text-brand-gold font-mono leading-none">
-              <span>Google Rank:</span>
+            <div className="flex items-center gap-2 text-xs text-[#D4AF37] font-mono">
+              <Sparkles className="w-4 h-4" />
+              <span>G-Maps Verified Rank:</span>
               <strong className="font-bold underline">{GOOGLE_RATING}</strong>
             </div>
           </div>
 
-          {/* Quick navigation anchor feeds */}
-          <div className="text-left">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-brand-gold mb-4">Navigations</h4>
-            <ul className="text-xs space-y-2 font-sans">
+          {/* Quick links portal */}
+          <div className="text-left space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4AF37]">Explore Suites</h4>
+            <ul className="text-xs space-y-3 font-sans">
               <li>
-                <button onClick={() => handleNavigate("dashboard")} className="hover:text-white hover:underline transition text-left cursor-pointer">
-                  Diner Dashboard
+                <button onClick={() => handleNavigate("dashboard")} className="text-slate-400 hover:text-[#D4AF37] transition duration-300 text-left cursor-pointer flex items-center gap-2">
+                  <span>🏰</span> <span>Diner Showcase</span>
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavigate("menu")} className="hover:text-white hover:underline transition text-[#FAF6F0] text-left cursor-pointer">
-                  Interactive Menus
+                <button onClick={() => handleNavigate("menu")} className="text-slate-400 hover:text-[#D4AF37] transition duration-300 text-left cursor-pointer flex items-center gap-2">
+                  <span>🍽️</span> <span>Authentic Menu Board</span>
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavigate("booking")} className="hover:text-white hover:underline transition text-[#FAF6F0] text-left cursor-pointer">
-                  Book VIP Seats
+                <button onClick={() => handleNavigate("booking")} className="text-slate-400 hover:text-[#D4AF37] transition duration-300 text-left cursor-pointer flex items-center gap-2">
+                  <span>🎫</span> <span>VIP Table Booking</span>
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Address markers details */}
-          <div className="text-left text-xs space-y-1">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-brand-gold mb-4">Contact Desk</h4>
-            <p className="text-slate-200">🟢 WhatsApp: +91 99850 84847</p>
-            <p className="text-slate-200">📞 Call Helpline: +91 79815 62535</p>
-            <p className="text-slate-200">🟣 PhonePe / GPay: +91 70132 20053</p>
-            <p className="text-slate-300">✉️ Email: reserve@havelibanquets.com</p>
-            <p className="text-slate-400 leading-normal mt-2">
-              📍 Opp. RTC Bus stand,<br/> Register Office Line, N.S Nagar, Markapur, AP.
-            </p>
+          {/* Direct coordinates contacts */}
+          <div className="text-left text-xs space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4AF37]">Helpline Gate</h4>
+            <div className="space-y-2 font-mono text-[11px] text-slate-300">
+              <p className="flex items-center gap-1.5 text-emerald-400">
+                <span>🟢 WhatsApp:</span> <span>+91 99850 84847</span>
+              </p>
+              <p className="flex items-center gap-1.5 text-slate-200">
+                <span>📞 Hotline Table:</span> <span>+91 79815 62535</span>
+              </p>
+              <p className="flex items-center gap-1.5 text-amber-400">
+                <span>🟡 UPI Desk:</span> <span>+91 70132 20053</span>
+              </p>
+              <p className="text-slate-400 font-sans text-xs pt-1.5 leading-normal">
+                📍 Opp. RTC Bus stand, Register Office Line, N.S Nagar, Markapur, Andhra Pradesh 523316.
+              </p>
+            </div>
           </div>
 
         </div>
 
-        {/* Co-signature credits */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-white/5 text-center text-[11px] text-slate-500 font-mono flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© 2026 Haveli Banquet Hall And Restaurant. All rights reserved.</p>
-          <p className="flex items-center gap-1">
-            Crafted with royal standards & authentic pride <Heart className="w-3 h-3 text-red-600 fill-red-600" />
+        {/* Outer subcredits bar */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-slate-900 text-center text-[10px] text-slate-600 font-mono flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p>© 2026 Haveli Banquet Hall And Restaurant. Preserved with 5-Star Monarchy Standards.</p>
+          <p className="flex items-center gap-1.5 text-slate-500">
+            Heritage Creative Direction & Custom Glassmorphic Engineering <Heart className="w-3 h-3 text-[#7E1C2E] fill-[#7E1C2E]" />
           </p>
         </div>
       </footer>
