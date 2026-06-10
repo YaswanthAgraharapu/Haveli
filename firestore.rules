@@ -25,13 +25,24 @@ service cloud.firestore {
     match /bookings/{bookingId} {
       allow read: if true; // Open reading allows guests to verify and fetch active passes
       allow create: if isValidId(bookingId) && isValidBooking(incoming()) && incoming().code == bookingId;
-      allow update, delete: if isValidId(bookingId) && isValidBooking(incoming());
+      allow update: if isValidId(bookingId) && isValidBooking(incoming());
+      allow delete: if isValidId(bookingId);
     }
 
     // Match block for Menu Categories metadata
     match /menuCategories/{categoryId} {
       allow read: if true; // Open catalog for all customers
       allow write: if isSignedIn(); // Restricted strictly with authenticated tokens
+    }
+
+    // Match block for systemstate
+    match /systemstate/{stateId} {
+      allow read, write: if isValidId(stateId);
+    }
+
+    // Match block for connection test probe
+    match /test/{testId} {
+      allow read: if isValidId(testId);
     }
   }
 }

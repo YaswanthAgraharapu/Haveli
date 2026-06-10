@@ -18,35 +18,30 @@ const DEFAULT_MOMENTS = [
   {
     id: "g1",
     url: "/images/image1.jpg",
-    fallback: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80",
     title: "Mughal Imperial Banquet Hall",
     description: "Grand physical celebration layout featuring soundproof acoustic panels, velvet royal seating, and magnificent gold-burgundy floral decor."
   },
   {
     id: "g2",
     url: "/images/image2.jpg",
-    fallback: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=1000&q=80",
     title: "Signature Dum Biryani Platter",
     description: "Premium long-grain raw pressure basmati, slow-steamed with vintage spices and clarified butter."
   },
   {
     id: "g3",
     url: "/images/image3.jpg",
-    fallback: "https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&q=80",
     title: "Private Royalty Dining Corner",
     description: "Bespoke candlelight dining alcoves framed by wooden heritage carvings and immersive gold accent lamps."
   },
   {
     id: "g4",
     url: "/images/image4.jpg",
-    fallback: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000&q=80",
     title: "Breathtaking Festive Lights",
     description: "Evening visual layout welcoming high-profile corporate delegates and wedding receptions."
   },
   {
     id: "g5",
     url: "/images/image5.jpg",
-    fallback: "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=1000&q=80",
     title: "Gourmet Table Reception",
     description: "Immersive tablescapes dressed with traditional royal brass cutlery and organic petal aesthetics."
   }
@@ -98,12 +93,9 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
   });
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // If local images are not uploaded, hide broken elements cleanly instead of loading preloaded Unsplash links
     const target = e.currentTarget;
-    const urlPath = target.src;
-    const matched = DEFAULT_MOMENTS.find(m => urlPath.endsWith(m.url) || urlPath === m.url);
-    if (matched?.fallback) {
-      target.src = matched.fallback;
-    }
+    target.style.opacity = "0";
   };
 
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -151,7 +143,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
             id: p.id,
             url: p.url || "",
             title: p.title || "Special Experience",
-            description: p.description || "Captured live inside Haveli Palace and Grand Dining."
+            description: p.description || "Captured live inside Haveli Banquet Hall And Restaurant and Grand Dining."
           })));
         } else {
           setMomentsPhotos(DEFAULT_MOMENTS);
@@ -444,7 +436,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 <p className="absolute bottom-3 left-3 text-white text-xs font-serif font-bold tracking-wide">
-                  {momentsPhotos[activeMomentIndex]?.title || "Haveli Palace"}
+                  {momentsPhotos[activeMomentIndex]?.title || "Haveli Banquet Hall And Restaurant"}
                 </p>
               </div>
 

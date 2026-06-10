@@ -40,6 +40,14 @@
     "/menuCategories/{categoryId}": {
       "schema": "menuCategory",
       "description": "Culinary menu categories collection."
+    },
+    "/systemstate/{stateId}": {
+      "schema": "object",
+      "description": "Global DB system state synchronization for high availability."
+    },
+    "/test/{testId}": {
+      "schema": "object",
+      "description": "Connection handshake validation."
     }
   }
 }
