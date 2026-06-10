@@ -405,7 +405,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
                 onClick={() => onNavigate("booking")}
                 className="px-8 py-4 bg-gradient-to-r from-[#D4AF37] to-[#A3791E] hover:from-[#FFF2C2] hover:to-[#D4AF37] text-black font-extrabold uppercase text-xs tracking-widest rounded-xl shadow-[0_10px_30px_rgba(212,175,55,0.25)] transition duration-300 cursor-pointer flex items-center gap-2"
               >
-                <span>Book VIP Table</span>
+                <span>Book Table Reservation</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button

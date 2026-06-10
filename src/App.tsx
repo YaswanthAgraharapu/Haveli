@@ -235,7 +235,7 @@ export default function App() {
               </li>
               <li>
                 <button onClick={() => handleNavigate("booking")} className="text-slate-400 hover:text-[#D4AF37] transition duration-300 text-left cursor-pointer flex items-center gap-2">
-                  <span>🎫</span> <span>VIP Table Booking</span>
+                  <span>🎫</span> <span>Booking Table Reservation</span>
                 </button>
               </li>
               <li>
