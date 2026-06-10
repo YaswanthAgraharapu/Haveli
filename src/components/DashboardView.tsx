@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Star, Flame, Phone, MessageSquare, MapPin, Award, CheckCircle, Smartphone, ArrowRight, UtensilsCrossed, CalendarDays, Camera, Sparkles, Send, Map, ChevronLeft, ChevronRight } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import { DailyDeal } from "./AdminSuite";
+import { GOOGLE_MAPS_URL } from "../menuData";
 
 const DEFAULT_MOMENTS = [
   {
@@ -600,7 +601,13 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
             </p>
           </div>
 
-          <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <a
+            href={GOOGLE_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4 bg-slate-50 hover:bg-slate-100 hover:border-amber-400 p-4 rounded-2xl border border-slate-200 transition duration-300 group cursor-pointer"
+            title="Read More Google Reviews"
+          >
             <div className="text-center shrink-0">
               <span className="text-3.5xl font-mono font-black text-[#800E14] leading-none block">
                 {calculatedRating}
@@ -613,131 +620,82 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star 
                     key={s} 
-                    className={`w-4 h-4 ${s <= Math.round(calculatedRating) ? "fill-amber-500" : "text-gray-300"}`} 
+                    className={`w-4 h-4 ${s <= Math.round(calculatedRating) ? "fill-amber-500 text-amber-500" : "text-gray-300"}`} 
                   />
                 ))}
               </div>
-              <p className="text-xs font-bold text-slate-800 mt-1">{totalReviewsCount} Customer Reviews verified</p>
+              <p className="text-xs font-bold text-slate-800 mt-1 md:group-hover:underline">
+                {totalReviewsCount} Customer Reviews verified ↗
+              </p>
             </div>
-          </div>
+          </a>
         </div>
 
-        {/* Form to submit review with optional aspect ratio image upload */}
-        <form onSubmit={handleReviewSubmit} className="bg-gradient-to-br from-slate-50/50 to-slate-100/50 p-5 rounded-2.5xl border border-slate-200/60 text-slate-800 space-y-4">
-          <div className="flex items-center gap-2 text-slate-900">
-            <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500" />
-            <h3 className="font-serif font-bold text-base">Write a Review & Add Live Photos</h3>
-          </div>
-
-          {reviewSuccess && (
-            <div className="p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs rounded-xl font-medium">
-              ✅ {reviewSuccess}
-            </div>
-          )}
-          {reviewError && (
-            <div className="p-3 bg-red-50 text-red-800 border border-red-200 text-xs rounded-xl font-medium">
-              ⚠️ {reviewError}
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Reviewer Name */}
-            <div>
-              <label className="text-[10px] font-mono uppercase text-gray-500 font-bold block mb-1">Your Full Name <span className="text-red-500">*</span></label>
-              <input
-                type="text"
-                placeholder="e.g. Ramesh Kumar"
-                required
-                value={newReviewName}
-                onChange={(e) => setNewReviewName(e.target.value)}
-                className="w-full p-2.5 text-xs bg-white border border-slate-300 rounded-lg focus:border-[#800E14] focus:outline-none focus:ring-1 focus:ring-[#800E14]"
-              />
-            </div>
-
-            {/* Star selector */}
-            <div>
-              <label className="text-[10px] font-mono uppercase text-gray-500 font-bold block mb-1">Star Rating <span className="text-red-500">*</span></label>
-              <div className="flex items-center gap-1.5 py-1.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setNewReviewRating(star)}
-                    className="cursor-pointer transition-transform duration-200 hover:scale-125 focus:outline-none"
-                  >
-                    <Star
-                      className={`w-6 h-6 ${star <= newReviewRating ? "text-amber-500 fill-amber-500" : "text-slate-300"}`}
-                    />
-                  </button>
-                ))}
-                <span className="text-xs font-mono font-bold text-gray-500 ml-2">({newReviewRating} / 5)</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Feedback (optional) */}
-          <div>
-            <label className="text-[10px] font-mono uppercase text-gray-500 font-bold block mb-1">Feedback Comments <span className="text-gray-400 font-normal">(Optional)</span></label>
-            <textarea
-              placeholder="Tell other food-lovers about the food taste, prices, cleanliness, and environment..."
-              rows={3}
-              value={newReviewFeedback}
-              onChange={(e) => setNewReviewFeedback(e.target.value)}
-              className="w-full p-2.5 text-xs bg-white border border-slate-300 rounded-lg focus:border-[#800E14] focus:outline-none focus:ring-1 focus:ring-[#800E14]"
-            />
-          </div>
-
-          {/* Aspect-ratio image attachment */}
-          <div className="space-y-2">
-            <label className="text-[10px] font-mono uppercase text-gray-500 font-bold block mb-1">Attach Food or Seating Photos <span className="text-gray-400 font-normal">(Optional, any aspect ratio)</span></label>
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="flex items-center gap-2 p-2.5 px-4 bg-[#800E14]/10 border border-[#800E14]/25 hover:bg-[#800E14]/15 rounded-lg text-xs font-bold text-[#800E14] cursor-pointer transition">
-                <Camera className="w-4 h-4 text-[#800E14]" />
-                <span>Choose Media File</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-
-              {newReviewImageName && (
-                <span className="text-xs font-mono text-gray-500 bg-gray-100 p-1.5 px-3 rounded-md max-w-xs truncate border">
-                  📎 {newReviewImageName}
+        {/* Redirecting rating banner to Google Maps Reviews */}
+        <div id="google_maps_redirect_card" className="bg-gradient-to-br from-[#800E14]/5 to-amber-50/25 border border-[#EAC775]/50 rounded-3xl p-6 sm:p-8 text-slate-800 space-y-6 relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#EAC775]/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2.5 max-w-xl text-left">
+              <div className="flex items-center gap-2.5 text-slate-950">
+                <span className="p-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-700">
+                  <Sparkles className="w-5 h-5 text-amber-600 fill-amber-600 animate-pulse" />
                 </span>
-              )}
+                <h3 className="font-serif font-black text-xl text-slate-900">Submit Your Real-Time Rating & Review</h3>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                To protect authentic customer voices and showcase our genuine culinary legacy, all ratings, feedback comments, and food photos are verified and published exclusively on our official <strong>Google Maps Profile</strong>.
+              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] font-mono uppercase font-bold text-gray-500 pt-1">
+                <span className="flex items-center gap-1.5 text-[#800E14]">⭐ 4.0/5 STAR RATING</span>
+                <span className="text-slate-300">•</span>
+                <span className="flex items-center gap-1.5 text-[#800E14]">📸 PHOTO UPLOAD SUPPORT</span>
+                <span className="text-slate-300">•</span>
+                <span className="flex items-center gap-1.5 text-[#800E14]">⚡ IMMEDIATE LIVE SYNC</span>
+              </div>
             </div>
 
-            {newReviewImage && (
-              <div className="mt-3.5 max-w-sm rounded-xl overflow-hidden border p-1 bg-white inline-block">
-                <span className="text-[9px] font-mono text-gray-400 block px-1.5 mb-1">Image Aspect Ratio Confirmed</span>
-                <img
-                  src={newReviewImage}
-                  alt="Review attachment preview"
-                  referrerPolicy="no-referrer"
-                  className="max-h-[160px] w-auto max-w-full rounded-lg object-contain bg-slate-50 border"
-                />
+            <div className="flex flex-col items-center justify-center bg-white border border-[#EAC775]/40 rounded-2xl p-5 shadow-sm shrink-0 min-w-[220px]">
+              <span className="text-[10px] font-mono uppercase text-gray-450 font-bold tracking-wider mb-2">Select Your Rating</span>
+              <div className="flex items-center gap-1.5 mb-2.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <a
+                    key={star}
+                    href={GOOGLE_MAPS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Rate ${star} Stars on Google Maps`}
+                    className="cursor-pointer transition-transform duration-200 hover:scale-125 text-slate-300 hover:text-amber-500"
+                  >
+                    <Star className="w-6 h-6 fill-current" />
+                  </a>
+                ))}
               </div>
-            )}
+              <span className="text-[9px] font-mono text-center text-gray-400 leading-relaxed block max-w-[160px]">
+                Clicking any star opens our official Google profile automatically!
+              </span>
+            </div>
           </div>
 
-          {/* Action button */}
-          <button
-            type="submit"
-            disabled={isSubmittingReview}
-            className="px-5 py-2.5 bg-[#800E14] hover:bg-[#800E14]/90 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition shadow flex items-center justify-center gap-1.5 disabled:opacity-55 cursor-pointer"
-          >
-            {isSubmittingReview ? (
-              <span>Publishing Review...</span>
-            ) : (
-              <>
-                <Send className="w-3.5 h-3.5" />
-                <span>Submit Live Review</span>
-              </>
-            )}
-          </button>
-        </form>
+          <div className="h-px bg-slate-200/80"></div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+              <span className="text-xs font-mono font-bold text-slate-600">Official Haveli Restaurant & Banquet Hall profile is active</span>
+            </div>
+            
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-7 py-3.5 bg-[#800E14] hover:bg-slate-900 text-[#EAC775] hover:text-white text-xs font-mono tracking-widest uppercase font-black rounded-xl transition duration-300 shadow-md text-center flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Map className="w-4 h-4 fill-current shrink-0" />
+              <span>Redirect to Google Maps Reviews</span>
+            </a>
+          </div>
+        </div>
 
         {/* Separated Ratings Sections based on user feedback layout instructions */}
         <div className="space-y-8 pt-2">
@@ -841,11 +799,18 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
       </div>
 
       {/* 6. QUICK BRAND STATS GRID */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
-        <div className="bg-slate-100 p-4 rounded-2xl text-center border shadow-xs">
-          <span className="text-[9px] font-mono text-gray-500 uppercase block">Overall Rating</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 text-slate-800 font-sans">
+        <a 
+          href={GOOGLE_MAPS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-slate-100 hover:bg-slate-200 hover:border-amber-500/50 p-4 rounded-2xl text-center border shadow-xs block transition cursor-pointer group"
+          title="See verified reviews on Google Maps"
+        >
+          <span className="text-[9px] font-mono text-gray-500 uppercase block group-hover:text-[#800E14] transition">Overall Rating</span>
           <span className="text-xl font-serif text-[#800E14] font-black mt-1 block">⭐ {calculatedRating} Stars</span>
-        </div>
+          <span className="text-[9px] text-[#800E14]/70 group-hover:text-[#800E14] font-semibold underline block mt-1">Google Maps ↗</span>
+        </a>
         <div className="bg-slate-100 p-4 rounded-2xl text-center border shadow-xs">
           <span className="text-[9px] font-mono text-gray-500 uppercase block">Region Priority</span>
           <span className="text-xl font-serif text-[#800E14] font-black mt-1 block">🏡 Markapur</span>

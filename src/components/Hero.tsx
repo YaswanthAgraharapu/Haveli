@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Star, Flame, Ticket, ShieldAlert, Award, ChevronDown } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import { DailyDeal } from "./AdminSuite";
+import { GOOGLE_MAPS_URL } from "../menuData";
 
 export default function Hero({ onBookNowClick, onAdminClick }: { onBookNowClick: () => void; onAdminClick: () => void }) {
   const [deal, setDeal] = useState<DailyDeal>({
@@ -81,10 +82,16 @@ export default function Hero({ onBookNowClick, onAdminClick }: { onBookNowClick:
                 Premium Multi-Cuisine Banquets & Diner
               </span>
               <div className="h-4 w-px bg-white/15"></div>
-              <div className="flex items-center gap-1 text-brand-gold">
-                <Star className="w-3 h-3 fill-brand-gold" />
-                <span className="font-mono font-bold">4.0 rating</span>
-              </div>
+              <a 
+                href={GOOGLE_MAPS_URL} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-1 text-brand-gold hover:text-white transition cursor-pointer"
+                title="View Google Maps Rating"
+              >
+                <Star className="w-3 h-3 fill-brand-gold animate-pulse" />
+                <span className="font-mono font-bold underline">4.0 rating</span>
+              </a>
             </div>
 
             <div className="space-y-4">
@@ -101,10 +108,16 @@ export default function Hero({ onBookNowClick, onAdminClick }: { onBookNowClick:
 
             {/* Micro details row */}
             <div className="grid grid-cols-2 gap-4 border-t border-b border-white/10 py-4 max-w-xl text-xs font-mono">
-              <div>
-                <dt className="text-gray-400 block uppercase font-bold text-[10px]">Google Rating</dt>
-                <dd className="text-brand-gold font-bold text-sm mt-0.5 font-sans">🌟 4.0/5 (383 Reviews)</dd>
-              </div>
+              <a 
+                href={GOOGLE_MAPS_URL} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="block hover:bg-white/5 p-1 rounded-lg transition text-left cursor-pointer group"
+                title="View Verified Google Reviews"
+              >
+                <dt className="text-gray-400 block uppercase font-bold text-[10px] group-hover:text-brand-gold">Google Rating</dt>
+                <dd className="text-brand-gold font-bold text-sm mt-0.5 font-sans underline group-hover:text-white">🌟 4.0/5 (383 Reviews)</dd>
+              </a>
               <div>
                 <dt className="text-gray-400 block uppercase font-bold text-[10px]">Today's Promotion</dt>
                 <dd className="text-brand-gold font-bold text-sm mt-0.5 truncate font-sans">{deal.offerTitle}</dd>
