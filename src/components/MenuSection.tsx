@@ -210,46 +210,34 @@ export default function MenuSection() {
                     {/* Category Menu Items Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {catGroup.items.map((item, itemIdx) => {
-                        const fallbackUrl = headImage;
+                        const isVeg = isVegDish(item, catGroup.categoryName);
                         return (
                           <div 
                             key={item.name + itemIdx}
                             className="glass-panel p-5 rounded-3xl border border-white/5 hover:border-[#D4AF37]/25 glass-card-hover text-left flex flex-col justify-between space-y-4"
                           >
                             <div className="space-y-3">
-                              {/* Small thumb tag */}
-                              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative border border-white/5">
-                                <img 
-                                  src={fallbackUrl} 
-                                  alt={item.name} 
-                                  className="w-full h-full object-cover bg-stone-900" 
-                                />
-                                {(() => {
-                                  const isVeg = isVegDish(item, catGroup.categoryName);
-                                  return (
-                                    <span className={`absolute top-3 left-3 px-2.5 py-1 text-[8px] font-mono font-bold uppercase rounded-md border ${
-                                      isVeg 
-                                        ? "bg-emerald-950/80 text-emerald-400 border-emerald-500/20" 
-                                        : "bg-red-950/80 text-red-400 border-red-500/20"
-                                    }`}>
-                                      {isVeg ? "🟢 VEGETARIAN" : "🔴 NON-VEGETARIAN"}
-                                    </span>
-                                  );
-                                })()}
+                              {/* Header next to veg/non-veg status */}
+                              <div className="flex items-start justify-between gap-3">
+                                <cite className="not-italic text-sm font-serif font-bold text-white block leading-snug">{item.name}</cite>
+                                <span className={`px-2 py-0.5 text-[7px] font-mono font-bold uppercase rounded border shrink-0 ${
+                                  isVeg 
+                                    ? "bg-[#064e3b]/80 text-[#34d399] border-[#059669]/25" 
+                                    : "bg-[#7f1d1d]/80 text-[#fca5a5] border-[#b91c1c]/25"
+                                }`}>
+                                  {isVeg ? "🟢 VEG" : "🔴 NON-VEG"}
+                                </span>
                               </div>
 
-                              <div className="space-y-1">
-                                <cite className="not-italic text-sm font-serif font-bold text-white block">{item.name}</cite>
-                                <p className="text-[11px] text-slate-400 font-sans leading-relaxed min-h-[32px] line-clamp-2">
-                                  {item.description || "Traditional Mughal formula, curated with hand-ground parameters."}
-                                </p>
-                              </div>
+                              <p className="text-[11px] text-slate-400 font-sans leading-relaxed min-h-[32px] line-clamp-2">
+                                {item.description || "Traditional Mughal formula, curated with hand-ground parameters."}
+                              </p>
                             </div>
 
                             {/* footer of the card */}
                             <div className="border-t border-slate-900 pt-3 flex items-center justify-between">
                               <span className="text-xs font-mono text-[#D4AF37] font-semibold">₹ {item.price}</span>
-                              <span className="text-[9px] text-slate-500 font-mono tracking-wider font-semibold">ESTD. OWNER VALUE</span>
+                              <span className="text-[9px] text-slate-500 font-mono tracking-wider">ESTD. OWNER VALUE</span>
                             </div>
 
                           </div>

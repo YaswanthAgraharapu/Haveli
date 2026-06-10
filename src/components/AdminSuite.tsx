@@ -1109,9 +1109,9 @@ export default function AdminSuite() {
               <div className="p-3 bg-red-50/50 rounded-xl border border-red-100 flex items-start gap-2.5">
                 <ShieldAlert className="w-4 h-4 text-red-700 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <span className="text-xs font-bold text-[#0b1528] block">High Security Option Enabled</span>
+                  <span className="text-xs font-bold text-[#0b1528] block">Firebase Auth Active</span>
                   <p className="text-[11px] text-gray-550 leading-normal">
-                    Plain password-based direct logins are entirely retired for maximum protection. Administrative access is regulated by real-time generated OTP codes.
+                    Staff authentication is integrated with Google Firebase. Access is restricted to authorized Gmail addresses and security passwords.
                   </p>
                 </div>
               </div>

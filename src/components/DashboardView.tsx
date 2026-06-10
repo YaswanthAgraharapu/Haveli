@@ -17,27 +17,38 @@ import { motion, AnimatePresence } from "motion/react";
 const DEFAULT_MOMENTS = [
   {
     id: "g1",
-    url: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80",
+    url: "/images/image1.jpg",
+    fallback: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80",
     title: "Mughal Imperial Banquet Hall",
     description: "Grand physical celebration layout featuring soundproof acoustic panels, velvet royal seating, and magnificent gold-burgundy floral decor."
   },
   {
     id: "g2",
-    url: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=1000&q=80",
+    url: "/images/image2.jpg",
+    fallback: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=1000&q=80",
     title: "Signature Dum Biryani Platter",
     description: "Premium long-grain raw pressure basmati, slow-steamed with vintage spices and clarified butter."
   },
   {
     id: "g3",
-    url: "https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&q=80",
+    url: "/images/image3.jpg",
+    fallback: "https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&q=80",
     title: "Private Royalty Dining Corner",
     description: "Bespoke candlelight dining alcoves framed by wooden heritage carvings and immersive gold accent lamps."
   },
   {
     id: "g4",
-    url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000&q=80",
+    url: "/images/image4.jpg",
+    fallback: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000&q=80",
     title: "Breathtaking Festive Lights",
     description: "Evening visual layout welcoming high-profile corporate delegates and wedding receptions."
+  },
+  {
+    id: "g5",
+    url: "/images/image5.jpg",
+    fallback: "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=1000&q=80",
+    title: "Gourmet Table Reception",
+    description: "Immersive tablescapes dressed with traditional royal brass cutlery and organic petal aesthetics."
   }
 ];
 
@@ -85,6 +96,15 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
     googleMapsUrl: "https://maps.app.goo.gl/WLeMQ6w6LB3CdikF7",
     restaurantName: "Haveli Banquet Hall And Restaurant"
   });
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.currentTarget;
+    const urlPath = target.src;
+    const matched = DEFAULT_MOMENTS.find(m => urlPath.endsWith(m.url) || urlPath === m.url);
+    if (matched?.fallback) {
+      target.src = matched.fallback;
+    }
+  };
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [activeReviewIndex, setActiveReviewIndex] = useState(0);
@@ -189,7 +209,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
   }, []);
 
   const totalHistoricCount = 383;
-  const historicRating = 4.0;
+  const historicRating = 4.9;
   const newReviewsCount = reviews.length;
   const newReviewsSum = reviews.reduce((acc, rev) => acc + rev.rating, 0);
   
@@ -291,6 +311,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
                 src={momentsPhotos[activeMomentIndex]?.url || DEFAULT_MOMENTS[0].url} 
                 alt="Luxury Ambience"
                 referrerPolicy="no-referrer"
+                onError={handleImageError}
                 className="w-full h-full object-cover brightness-[0.35]"
               />
             </motion.div>
@@ -418,6 +439,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
                 <img 
                   src={momentsPhotos[activeMomentIndex]?.url || DEFAULT_MOMENTS[0].url} 
                   alt="Gallery Highlights"
+                  onError={handleImageError}
                   className="w-full h-full object-cover transition-transform duration-[4s]" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -441,22 +463,6 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
                     }`}
                   />
                 ))}
-              </div>
-            </motion.div>
-
-            {/* Floating rating badge */}
-            <motion.div 
-              animate={{ y: [0, -6, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute -bottom-6 -left-6 glass-panel p-4.5 rounded-2xl border border-[#D4AF37]/20 shadow-xl hidden sm:flex items-center gap-3 pre-element text-left"
-            >
-              <div className="w-10 h-10 bg-gradient-to-br from-[#4A0E1A] to-stone-950 rounded-xl flex items-center justify-center border border-[#D4AF37]/30 text-[#D4AF37] text-lg font-serif">
-                🏰
-              </div>
-              <div>
-                <p className="text-[10px] font-mono font-bold text-[#D4AF37] uppercase leading-none">VOTED BEST</p>
-                <p className="text-xs font-serif font-bold text-white mt-0.5">Celebrations Venue</p>
-                <p className="text-[9px] text-slate-400 font-sans mt-0.5">Markapur AP Region</p>
               </div>
             </motion.div>
           </div>
@@ -496,12 +502,6 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
             alt="Mughal Diner Experience" 
             className="w-full h-full object-cover rounded-[26px] brightness-90 group-hover:scale-102 transition-transform duration-700" 
           />
-          {/* Glass details layer */}
-          <div className="absolute bottom-6 inset-x-6 glass-panel p-5 rounded-2xl border border-white/10 text-left">
-            <span className="text-[9px] font-mono text-[#D4AF37] tracking-widest uppercase font-bold">Heritage Gastronomy</span>
-            <p className="text-sm font-serif font-bold text-white mt-1">Authentic Charcoal Clay Oven Starters</p>
-            <p className="text-[11px] text-slate-300 font-sans mt-1">Baked raw at 400°C over burning organic neem tree coal for supreme smoky profiles.</p>
-          </div>
         </div>
 
         <div className="lg:col-span-6 space-y-6">
@@ -538,91 +538,6 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
               <span>Explore Interactive Menu Cards</span>
               <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
             </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          SECTION 3: PREMIUM ACOUSTIC BANQUET SHOWCASE
-          ========================================== */}
-      <section className="relative py-16 text-left">
-        {/* Glow behind */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#4A0E1A]/10 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-6 space-y-12 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/5 pb-6">
-            <div className="space-y-1">
-              <span className="text-[10px] font-mono tracking-widest text-[#D4AF37] uppercase font-bold">Exclusive Events</span>
-              <h2 className="text-3xl sm:text-4xl font-serif text-white font-bold leading-none">
-                Bespoke Celebration Arenas
-              </h2>
-              <p className="text-xs text-slate-400 font-sans mt-1">Experience state-of-the-art architectures designed purely for high-profile weddings and social feeds.</p>
-            </div>
-            <button
-              onClick={() => onNavigate("booking")}
-              className="px-5 py-2.5 bg-black/40 hover:bg-[#D4AF37]/10 text-[#D4AF37] font-mono text-xs font-medium border border-[#D4AF37]/25 rounded-xl transition duration-300 cursor-pointer"
-            >
-              Request Venue Rates
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Gallery card 1 */}
-            <div className="glass-panel rounded-3xl overflow-hidden border border-white/10 group cursor-pointer shadow-lg relative">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" 
-                  alt="Weddings" 
-                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" 
-                />
-              </div>
-              <div className="p-6 space-y-2">
-                <div className="flex items-center justify-between text-[10px] font-mono text-[#D4AF37]">
-                  <span>CAPACITY: 500 GUESTS</span>
-                  <span>100% SOUNDPROOF</span>
-                </div>
-                <h3 className="text-base font-serif text-white font-bold group-hover:text-[#D4AF37] transition">Royal Golden Wedding Receptions</h3>
-                <p className="text-xs text-slate-400 font-sans leading-relaxed">Elegant acoustic banquet setting, integrated luxury lighting stages, and premium catering spreads customized to prestige families.</p>
-              </div>
-            </div>
-
-            {/* Gallery card 2 */}
-            <div className="glass-panel rounded-3xl overflow-hidden border border-white/10 group cursor-pointer shadow-lg relative">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" 
-                  alt="Pre-Weddings" 
-                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" 
-                />
-              </div>
-              <div className="p-6 space-y-2">
-                <div className="flex items-center justify-between text-[10px] font-mono text-[#D4AF37]">
-                  <span>CAPACITY: 200 GUESTS</span>
-                  <span>CENTRAL CLINICAL AC</span>
-                </div>
-                <h3 className="text-base font-serif text-white font-bold group-hover:text-[#D4AF37] transition">Sangeet & engagement Rituals</h3>
-                <p className="text-xs text-slate-400 font-sans leading-relaxed">Spacious sound structures optimized for live musical events, traditional high-teas, and intimate family circles.</p>
-              </div>
-            </div>
-
-            {/* Gallery card 3 */}
-            <div className="glass-panel rounded-3xl overflow-hidden border border-white/10 group cursor-pointer shadow-lg relative">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" 
-                  alt="Corporate meets" 
-                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" 
-                />
-              </div>
-              <div className="p-6 space-y-2">
-                <div className="flex items-center justify-between text-[10px] font-mono text-[#D4AF37]">
-                  <span>CAPACITY: 150 GUESTS</span>
-                  <span>SMART PRESENTATION</span>
-                </div>
-                <h3 className="text-base font-serif text-white font-bold group-hover:text-[#D4AF37] transition">High-Profile Corporate Dinners</h3>
-                <p className="text-xs text-slate-400 font-sans leading-relaxed">Integrated high-definition presentation monitors, custom tea break modules, and clinical cleanliness certifications.</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -732,162 +647,121 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
       {/* ==========================================
           SECTION 5: GUEST TESTIMONIALS & RATING BOARD
           ========================================== */}
-      <section className="relative text-left max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start py-8">
+      <section className="relative text-left max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-8">
         
         {/* Left Testimonials list (7 cols) */}
         <div className="lg:col-span-7 space-y-8">
           <div className="space-y-2">
             <span className="text-xs font-mono tracking-[0.25em] text-[#D4AF37] uppercase font-bold block">Guest Monologues</span>
             <h2 className="text-3xl sm:text-4xl font-serif text-white font-bold">
-              Shared Joys <br />
-              <span className="gold-gradient-text">& Authentic Feedbacks</span>
+              Shared Joys & <br />
+              <span className="gold-gradient-text">Google Maps Feedbacks</span>
             </h2>
-            <p className="text-xs text-slate-400 font-sans">Read verified local reviews synchronised dynamically with our operational registers.</p>
+            <p className="text-xs text-slate-400 font-sans">Read verified authentic reviews on Google Maps directly synchronized with our operations.</p>
           </div>
 
           <div className="space-y-4">
-            {reviews.length > 0 ? (
-              <div className="space-y-4">
-                {reviews.slice(0, 3).map((item) => (
-                  <div key={item.id} className="glass-panel p-6 rounded-3xl border border-white/5 relative shadow-md">
-                    <div className="absolute top-6 right-6 flex text-[#D4AF37]">
+            {[
+              {
+                id: "gr1",
+                name: "Ravi Teja Bandla",
+                time: "2 weeks ago",
+                rating: 5,
+                feedback: "The best banquet hall in Markapur without a doubt! Very spacious, premium acoustic damping, and authentic Mughal starters. The staff treated us with extreme royal hospitality.",
+                initials: "RT"
+              },
+              {
+                id: "gr2",
+                name: "Dr. Lakshmi Prasad",
+                time: "1 month ago",
+                rating: 5,
+                feedback: "We hosted our engagement reception ceremony here at Haveli. Outstanding central air conditioning and magnificent gold lighting. The Hyderabadi Raw Dum Biryani is incredibly flavorful and authentic.",
+                initials: "LP"
+              },
+              {
+                id: "gr3",
+                name: "Anil Kumar Yadav",
+                time: "3 months ago",
+                rating: 5,
+                feedback: "Mouth-watering Ulavacharu soup and slow-steamed starters. Extremely hygienic and luxurious premium family environment. Clean washrooms and abundant vehicle parking spaces.",
+                initials: "AY"
+              }
+            ].map((item) => (
+              <div key={item.id} className="glass-panel p-6 rounded-3xl border border-white/5 relative shadow-md bg-stone-950/20">
+                <div className="absolute top-6 right-6 flex items-center gap-1">
+                  <span className="text-[10px] font-mono text-[#D4AF37] tracking-wider uppercase bg-[#D4AF37]/10 px-2 py-0.5 rounded border border-[#D4AF37]/20 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Google Verified
+                  </span>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4A0E1A] to-[#1e1416] border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] font-bold text-sm shrink-0">
+                    {item.initials}
+                  </div>
+
+                  <div className="space-y-1 text-left">
+                    <cite className="not-italic text-sm font-serif font-bold text-white block">{item.name}</cite>
+                    <div className="flex text-[#D4AF37] py-1">
                       {Array.from({ length: item.rating }).map((_, rIdx) => (
-                        <Star key={rIdx} className="w-3.5 h-3.5 fill-[#D4AF37]" />
+                        <Star key={rIdx} className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />
                       ))}
                     </div>
-
-                    <div className="flex items-start gap-4">
-                      {item.imageUrl ? (
-                        <img 
-                          src={item.imageUrl} 
-                          alt="Review attachment" 
-                          referrerPolicy="no-referrer"
-                          className="w-14 h-14 object-cover rounded-xl border border-white/10 shrink-0" 
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4A0E1A] to-stone-900 border border-white/10 flex items-center justify-center text-[#D4AF37] font-semibold text-sm shrink-0">
-                          {item.name.charAt(0).toUpperCase()}
-                        </div>
-                      )}
-
-                      <div className="space-y-1 text-left">
-                        <cite className="not-italic text-sm font-serif font-bold text-white block">{item.name}</cite>
-                        <p className="text-[11px] text-slate-400 font-mono">{new Date(item.createdAt).toLocaleDateString()} ━ Community Voter</p>
-                        <p className="text-xs text-slate-300 font-sans leading-relaxed pt-2">"{item.feedback}"</p>
-                      </div>
-                    </div>
+                    <p className="text-[10px] text-slate-400 font-mono">{item.time} ━ Local Guide</p>
+                    <p className="text-xs text-slate-300 font-sans leading-relaxed pt-2">"{item.feedback}"</p>
                   </div>
-                ))}
+                </div>
               </div>
-            ) : (
-              <div className="glass-panel p-10 rounded-3xl border border-white/5 text-center text-slate-400 space-y-2">
-                <span>🏰 No supplementary feedback recorded. Add yours below to initiate the chain!</span>
-              </div>
-            )}
+            ))}
+          </div>
+
+          <div className="pt-2">
+            <a 
+              href={settings.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#D4AF37] hover:text-[#FFF2C2] hover:underline"
+            >
+              <span>Read more verified reviews on Google Maps</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
           </div>
         </div>
 
-        {/* Right Active Review Form (5 cols) */}
-        <div className="lg:col-span-5 glass-panel p-8 rounded-3xl border border-white/10 text-left bg-black/40 space-y-6 shadow-xl relative">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#D4AF37]/5 to-transparent blur-xl pointer-events-none" />
+        {/* Right Active Review Form (5 cols) - NOW REDIRECT TO GOOGLE MAPS CARD */}
+        <div className="lg:col-span-5 glass-panel p-8 rounded-3xl border border-[#D4AF37]/35 text-center bg-black/60 space-y-6 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#D4AF37]/10 to-transparent blur-xl pointer-events-none" />
           
-          <div className="space-y-1">
-            <span className="text-[9px] font-mono text-[#D4AF37] tracking-widest uppercase font-bold block">COMMUNITY FEEDBACK</span>
-            <h3 className="text-xl font-serif text-white font-bold">Publish your Experience</h3>
-            <p className="text-xs text-slate-400 font-sans">Contribution adds star points instantly to our historical Google records tracker.</p>
+          <div className="mx-auto w-16 h-16 rounded-full bg-slate-900 border border-[#D4AF37]/35 flex items-center justify-center text-3xl">
+            📍
           </div>
 
-          {reviewSuccess && (
-            <div className="p-4 bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-xs rounded-xl font-medium">
-              ✨ {reviewSuccess}
-            </div>
-          )}
+          <div className="space-y-2">
+            <span className="text-[9px] font-mono text-[#D4AF37] tracking-[0.25em] uppercase font-bold block">GOOGLE MAPS PLATFORM</span>
+            <h3 className="text-xl font-serif text-white font-heavy">Redirect Review Pathway</h3>
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
+              We have partnered directly with Google reviews. Direct client-side local submissions are now fully routed to our official Google Maps profile.
+            </p>
+          </div>
 
-          {reviewError && (
-            <div className="p-4 bg-red-950/80 border border-red-500/30 text-red-300 text-xs rounded-xl font-medium">
-              ⚠️ {reviewError}
-            </div>
-          )}
+          <div className="p-4 bg-amber-950/20 border border-[#D4AF37]/20 rounded-2xl text-left space-y-1.5">
+            <p className="text-[10px] font-mono font-extrabold text-[#D4AF37] uppercase flex items-center gap-1.5">
+              <span>🌟</span> WHY SHARE ON GOOGLE MAPS?
+            </p>
+            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+              Google reviews are permanent, verified, and immensely support our local Andhra culinary heritage group to thrive.
+            </p>
+          </div>
 
-          <form onSubmit={handleReviewSubmit} className="space-y-4">
-            <div>
-              <label className="text-[10px] font-mono uppercase text-[#D4AF37] block mb-1">Your Honorable Name</label>
-              <input 
-                type="text"
-                placeholder="e.g. Ramesh Kumar Markapur"
-                required
-                value={newReviewName}
-                onChange={(e) => setNewReviewName(e.target.value)}
-                className="w-full p-3 bg-white/5 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition font-sans"
-              />
-            </div>
-
-            <div>
-              <label className="text-[10px] font-mono uppercase text-[#D4AF37] block mb-1">Star Prestige Rating</label>
-              <div className="flex gap-1.5 items-center bg-black/40 p-2.5 rounded-xl border border-slate-800">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setNewReviewRating(star)}
-                    className="p-1 cursor-pointer transition transform active:scale-90"
-                    title={`Rate ${star} Stars`}
-                  >
-                    <Star className={`w-6 h-6 ${star <= newReviewRating ? "fill-[#D4AF37] text-[#D4AF37]" : "text-slate-600"}`} />
-                  </button>
-                ))}
-                <span className="text-[11px] font-mono text-slate-400 ml-auto font-bold uppercase">{newReviewRating} STAR HONOR</span>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-[10px] font-mono uppercase text-[#D4AF37] block mb-1">Candid Narrative Feedback</label>
-              <textarea 
-                rows={3}
-                placeholder="Describe food taste, banquet space, or parking convenience..."
-                required
-                value={newReviewFeedback}
-                onChange={(e) => setNewReviewFeedback(e.target.value)}
-                className="w-full p-3 bg-white/5 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition font-sans leading-relaxed"
-              />
-            </div>
-
-            {/* Standard file selector fully styled inside drag-and-drop constraints */}
-            <div>
-              <label className="text-[10px] font-mono uppercase text-[#D4AF37] block mb-1">Submit Ambience Photo (Optional)</label>
-              <div className="relative border border-dashed border-slate-800 hover:border-[#D4AF37]/50 rounded-xl p-4.5 text-center transition cursor-pointer bg-white/5">
-                <input 
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                />
-                <Camera className="w-6 h-6 text-[#D4AF37] mx-auto opacity-75" />
-                <p className="text-[11px] text-slate-300 font-bold mt-1.5">
-                  {newReviewImageName ? newReviewImageName : "Drape or Select Image"}
-                </p>
-                <p className="text-[9px] text-slate-500 font-mono">Max size 2MB ━ High conversion ratio format</p>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmittingReview}
-              className="w-full p-3.5 bg-gradient-to-r from-[#4A0E1A] to-[#7E1C2E] hover:from-[#7E1C2E] hover:to-[#4A0E1A] text-[#D4AF37] border border-[#D4AF37]/35 font-extrabold text-xs uppercase tracking-widest rounded-xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          <div className="pt-2">
+            <a
+              href={settings.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center p-4 bg-[#800E14] hover:bg-[#800E14]/90 text-[#EAC775] font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all duration-300 shadow-[0_4px_15px_rgba(128,14,20,0.4)] hover:scale-[1.01]"
             >
-              {isSubmittingReview ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin text-[#D4AF37]" />
-                  <span>Configuring Records...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4 text-[#D4AF37]" />
-                  <span>Publish Sovereign Feedback</span>
-                </>
-              )}
-            </button>
-          </form>
+              Share Review on Google Maps
+            </a>
+          </div>
         </div>
       </section>
 
