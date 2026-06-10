@@ -38,7 +38,7 @@ const isVegDish = (item: MenuItem, categoryName: string): boolean => {
 export default function MenuSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [menu, setMenu] = useState<MenuCategory[]>(menuCategories);
+  const [menu, setMenu] = useState<MenuCategory[]>(menuCategories || []);
 
   // Sync menu with server logs dynamically
   const fetchMenuLive = async () => {
@@ -46,7 +46,9 @@ export default function MenuSection() {
       const res = await fetch("/api/menu");
       if (res.ok) {
         const data = await res.json();
-        setMenu(data);
+        if (Array.isArray(data)) {
+          setMenu(data);
+        }
       }
     } catch (e) {
       console.warn("Unable to fetch live menu: using static database backup.");
@@ -59,7 +61,7 @@ export default function MenuSection() {
     return () => clearInterval(interval);
   }, []);
 
-  const categoriesList = ["All", ...menu.map(c => c.categoryName)];
+  const categoriesList = ["All", ...(menu || []).filter(c => c && c.categoryName).map(c => c.categoryName)];
 
   // Helper matching items
   const getFilteredItems = (): { categoryName: string; items: MenuItem[] }[] => {

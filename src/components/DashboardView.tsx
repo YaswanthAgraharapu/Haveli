@@ -106,7 +106,20 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
   const loadData = async () => {
     const savedDeal = localStorage.getItem("haveli_daily_deal");
     if (savedDeal) {
-      setDeal(JSON.parse(savedDeal));
+      try {
+        const parsed = JSON.parse(savedDeal);
+        if (parsed && typeof parsed === "object") {
+          setDeal({
+            dayOfWeek: parsed.dayOfWeek || "Today",
+            offerTitle: parsed.offerTitle || "Royal Taste Festival",
+            discountRate: parsed.discountRate || "10% OFF on all signature Biryani choices",
+            specialRecommendation: parsed.specialRecommendation || "Ulavacharu Chicken Biryani",
+            activeAnnouncement: parsed.activeAnnouncement || "🏰 Exclusive: Experience the traditional culinary marvel of Haveli Dum Biryani"
+          });
+        }
+      } catch (e) {
+        console.warn("Error parsing deal:", e);
+      }
     }
 
     const savedPhotos = localStorage.getItem("haveli_gallery_photos");
@@ -134,7 +147,17 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
       const sRes = await fetch("/api/settings");
       if (sRes.ok) {
         const sData = await sRes.json();
-        setSettings(sData);
+        if (sData && typeof sData === "object") {
+          setSettings({
+            phone1: sData.phone1 || "99850 84847",
+            phone2: sData.phone2 || "79815 62535",
+            phone3: sData.phone3 || "70132 20053",
+            timings: sData.timings || "11:00 AM - 11:00 PM",
+            address: sData.address || "Opp. RTC Bus stand, Register Office Line, N.S Nagar, Markapur, Andhra Pradesh, 523316, IN",
+            googleMapsUrl: sData.googleMapsUrl || "https://maps.app.goo.gl/WLeMQ6w6LB3CdikF7",
+            restaurantName: sData.restaurantName || "Haveli Banquet Hall And Restaurant"
+          });
+        }
       }
     } catch (e) {
       console.warn("Fallback settings active.");
@@ -144,7 +167,9 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
       const rRes = await fetch("/api/reviews");
       if (rRes.ok) {
         const rData = await rRes.json();
-        setReviews(rData);
+        if (Array.isArray(rData)) {
+          setReviews(rData);
+        }
       }
     } catch (e) {
       console.warn("Fallback reviews active.");

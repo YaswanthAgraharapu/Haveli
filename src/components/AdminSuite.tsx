@@ -296,14 +296,25 @@ export default function AdminSuite() {
       const res = await fetch("/api/bookings");
       if (res.ok) {
         const data = await res.json();
-        setBookings(data);
-        localStorage.setItem("haveli_bookings", JSON.stringify(data));
+        if (Array.isArray(data)) {
+          setBookings(data);
+          localStorage.setItem("haveli_bookings", JSON.stringify(data));
+        } else {
+          throw new Error();
+        }
       } else {
         throw new Error();
       }
     } catch (e) {
       const savedBookings = localStorage.getItem("haveli_bookings");
-      if (savedBookings) setBookings(JSON.parse(savedBookings));
+      if (savedBookings) {
+        try {
+          const parsed = JSON.parse(savedBookings);
+          if (Array.isArray(parsed)) {
+            setBookings(parsed);
+          }
+        } catch (err) {}
+      }
     }
 
     // Load operational settings from backend as well
@@ -311,14 +322,29 @@ export default function AdminSuite() {
       const sRes = await fetch("/api/settings");
       if (sRes.ok) {
         const sData = await sRes.json();
-        setSettings(sData);
-        setRestaurantTimings(sData.timings);
+        if (sData && typeof sData === "object") {
+          setSettings({
+            phone1: sData.phone1 || "99850 84847",
+            phone2: sData.phone2 || "79815 62535",
+            phone3: sData.phone3 || "70132 20053",
+            timings: sData.timings || "11:00 AM - 11:00 PM",
+            address: sData.address || "Opp. RTC Bus stand, Register Office Line, N.S Nagar, Markapur, Andhra Pradesh, 523316, IN",
+            googleMapsUrl: sData.googleMapsUrl || "https://maps.app.goo.gl/WLeMQ6w6LB3CdikF7",
+            restaurantName: sData.restaurantName || "Haveli Banquet Hall And Restaurant"
+          });
+          setRestaurantTimings(sData.timings || "11:00 AM - 11:00 PM");
+        }
       }
     } catch (e) {}
 
     const savedLogs = localStorage.getItem("haveli_logs");
     if (savedLogs) {
-      setLogs(JSON.parse(savedLogs));
+      try {
+        const parsed = JSON.parse(savedLogs);
+        if (Array.isArray(parsed)) {
+          setLogs(parsed);
+        }
+      } catch (err) {}
     } else {
       // Seed default baseline logs for style
       const baseline = [
@@ -335,9 +361,11 @@ export default function AdminSuite() {
       const res = await fetch("/api/menu");
       if (res.ok) {
         const data = await res.json();
-        setMenuList(data);
-        if (data.length > 0 && !data.some((c: any) => c.categoryName === selectedEditorCategory)) {
-          setSelectedEditorCategory(data[0].categoryName);
+        if (Array.isArray(data)) {
+          setMenuList(data);
+          if (data.length > 0 && !data.some((c: any) => c.categoryName === selectedEditorCategory)) {
+            setSelectedEditorCategory(data[0].categoryName);
+          }
         }
       }
     } catch (e) {
