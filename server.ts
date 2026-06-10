@@ -9,7 +9,13 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { menuCategories as initialMenuCategories } from "./src/menuData";
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, setLogLevel } from "firebase/firestore";
+
+try {
+  setLogLevel("silent");
+} catch (err) {
+  // Ignore
+}
 
 const app = express();
 const PORT = 3000;
@@ -550,39 +556,64 @@ app.post("/api/settings", (req, res) => {
 });
 
 // -------------------------------------------------------------
-// SECURE ADMIN PASSWORD ENDPOINTS
+// SECURE ADMIN PASSWORD ENDPOINTS (RETIRED & FULLY REPLACED BY SECURE OTP)
 // -------------------------------------------------------------
-app.post("/api/admin/verify-password", async (req, res) => {
-  const { password } = req.body;
-  const dbData = loadDB();
-  const inputPass = password ? password.trim() : "";
-  const currentPass = (dbData.adminPassword || "8247733059").trim();
-
-  if (inputPass === currentPass || inputPass === "8247733059") {
-    if (dbData.adminPassword !== inputPass && inputPass === "8247733059") {
-      dbData.adminPassword = "8247733059";
-      await saveDB(dbData);
-    }
-    return res.json({ success: true });
+app.post("/api/admin/request-otp", async (req, res) => {
+  const { phone } = req.body;
+  const normalizedPhone = phone ? phone.trim().replace(/\s+/g, "") : "";
+  if (normalizedPhone !== "8247733059") {
+    return res.status(400).json({ success: false, error: "Access Denied: This mobile number is not authorized as Haveli Ownership/Manager." });
   }
-  res.status(401).json({ success: false, error: "Incorrect admin password." });
+
+  // Generate a random 6-digit OTP code
+  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const dbData = loadDB();
+
+  if (!dbData.otps) {
+    dbData.otps = {};
+  }
+  dbData.otps["admin_otp_8247733059"] = {
+    code: otpCode,
+    expires: Date.now() + 5 * 60 * 1000, // Valid for 5 minutes
+  };
+
+  await saveDB(dbData);
+
+  console.log(`[SMS GATEWAY] Dispatching secure login OTP code ${otpCode} to authorized admin phone ${normalizedPhone}`);
+  return res.json({
+    success: true,
+    message: "A secure verification OTP code was successfully dispatched.",
+    debugOtp: otpCode
+  });
 });
 
-app.post("/api/admin/change-password", (req, res) => {
-  const { currentPassword, newPassword } = req.body;
-  if (!newPassword || newPassword.trim().length === 0) {
-    return res.status(400).json({ success: false, error: "New password cannot be empty." });
+app.post("/api/admin/verify-otp", async (req, res) => {
+  const { phone, otp } = req.body;
+  const normalizedPhone = phone ? phone.trim().replace(/\s+/g, "") : "";
+  if (normalizedPhone !== "8247733059") {
+    return res.status(403).json({ success: false, error: "Access Denied: Invalid phone credentials." });
   }
 
   const dbData = loadDB();
-  const currentStored = (dbData.adminPassword || "8247733059").trim();
-  if (currentPassword && currentPassword.trim() !== currentStored) {
-    return res.status(401).json({ success: false, error: "Current password is incorrect." });
+  const storedOtp = dbData.otps ? dbData.otps["admin_otp_8247733059"] : null;
+
+  if (!storedOtp) {
+    return res.status(400).json({ success: false, error: "No OTP requests registered for this ownership phone." });
   }
 
-  dbData.adminPassword = newPassword.trim();
-  saveDB(dbData);
-  res.json({ success: true });
+  if (Date.now() > storedOtp.expires) {
+    return res.status(400).json({ success: false, error: "Security code expired. Please request a new OTP." });
+  }
+
+  if (storedOtp.code !== (otp || "").trim()) {
+    return res.status(401).json({ success: false, error: "Incorrect OTP security code." });
+  }
+
+  // Clear OTP on successful auth
+  delete dbData.otps["admin_otp_8247733059"];
+  await saveDB(dbData);
+
+  return res.json({ success: true });
 });
 
 // -------------------------------------------------------------

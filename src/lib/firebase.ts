@@ -1,7 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { getFirestore, doc, getDocFromServer } from "firebase/firestore";
+import { getFirestore, doc, getDocFromServer, setLogLevel } from "firebase/firestore";
 import firebaseConfig from "../../firebase-applet-config.json";
+
+try {
+  setLogLevel("silent");
+} catch (err) {
+  // Ignore
+}
 
 // Initialize the Firebase App with configured keys
 const app = initializeApp(firebaseConfig);
