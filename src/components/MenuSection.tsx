@@ -38,6 +38,8 @@ const isVegDish = (item: MenuItem, categoryName: string): boolean => {
 export default function MenuSection() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [vegFilter, setVegFilter] = useState<"all" | "veg" | "non-veg">("all");
+  const [priceSort, setPriceSort] = useState<"default" | "low-to-high" | "high-to-low">("default");
   const [menu, setMenu] = useState<MenuCategory[]>(menuCategories || []);
 
   // Sync menu with server logs dynamically
@@ -72,11 +74,36 @@ export default function MenuSection() {
         return;
       }
 
-      const matchedItems = cat.items.filter(item => {
+      let matchedItems = cat.items.filter(item => {
         const matchesQuery = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                              (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
-        return matchesQuery;
+        
+        if (!matchesQuery) return false;
+
+        const isVeg = isVegDish(item, cat.categoryName);
+        if (vegFilter === "veg" && !isVeg) return false;
+        if (vegFilter === "non-veg" && isVeg) return false;
+
+        return true;
       });
+
+      if (priceSort !== "default") {
+        matchedItems = [...matchedItems].sort((a, b) => {
+          const getMinPrice = (priceStr: string | number): number => {
+            if (typeof priceStr === "number") return priceStr;
+            const matches = priceStr.match(/\d+/g);
+            if (matches && matches.length > 0) {
+              return Math.min(...matches.map(Number));
+            }
+            return 0;
+          };
+
+          const priceA = getMinPrice(a.price);
+          const priceB = getMinPrice(b.price);
+
+          return priceSort === "low-to-high" ? priceA - priceB : priceB - priceA;
+        });
+      }
 
       if (matchedItems.length > 0) {
         results.push({
@@ -148,7 +175,7 @@ export default function MenuSection() {
         </div>
 
         {/* High-End Glass Search bar */}
-        <div id="menu_content_anchor" className="glass-panel p-5 rounded-3xl border border-white/10 shadow-xl bg-black/45">
+        <div id="menu_content_anchor" className="glass-panel p-6 rounded-3xl border border-white/10 shadow-xl bg-black/45 space-y-4">
           <div className="relative">
             <input
               type="text"
@@ -167,6 +194,56 @@ export default function MenuSection() {
                 Clear
               </button>
             )}
+          </div>
+
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-3 border-t border-white/5">
+            {/* Filter Toggle */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                <Filter className="w-3 h-3 text-[#D4AF37]" /> Filter Diet:
+              </span>
+              <div className="flex bg-stone-900/80 p-0.5 rounded-xl border border-white/5">
+                {(["all", "veg", "non-veg"] as const).map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setVegFilter(type)}
+                    className={`px-3 py-1.5 rounded-lg text-[9px] font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer shrink-0 ${
+                      vegFilter === type
+                        ? type === "veg"
+                          ? "bg-emerald-950/95 text-emerald-400 border border-emerald-500/30 font-bold"
+                          : type === "non-veg"
+                          ? "bg-red-950/95 text-red-400 border border-red-500/30 font-bold"
+                          : "bg-[#D4AF37] text-black font-bold"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {type === "all" ? "All Diet" : type === "veg" ? "🟢 VEG" : "🔴 NON-VEG"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price Sort Selector */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
+                Sort Price:
+              </span>
+              <div className="flex bg-stone-900/80 p-0.5 rounded-xl border border-white/5">
+                {(["default", "low-to-high", "high-to-low"] as const).map((opt) => (
+                  <button
+                    key={opt}
+                    onClick={() => setPriceSort(opt)}
+                    className={`px-3 py-1.5 rounded-lg text-[9px] font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer shrink-0 ${
+                      priceSort === opt
+                        ? "bg-[#D4AF37] text-black font-extrabold"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {opt === "default" ? "Standard" : opt === "low-to-high" ? "₹ Low ➔ High" : "₹ High ➔ Low"}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 

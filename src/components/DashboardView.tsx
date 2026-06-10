@@ -209,7 +209,7 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
   }, []);
 
   const totalHistoricCount = 383;
-  const historicRating = 4.9;
+  const historicRating = 4.0;
   const newReviewsCount = reviews.length;
   const newReviewsSum = reviews.reduce((acc, rev) => acc + rev.rating, 0);
   
@@ -495,159 +495,47 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
       {/* ==========================================
           SECTION 2: SIGNATURE DINING EXPERIENCE
           ========================================== */}
-      <section className="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
-        <div className="lg:col-span-6 relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-gradient-to-tr from-[#4A0E1A] to-stone-950 p-1.5 rounded-[32px] border border-[#D4AF37]/20 shadow-[0_15px_35px_rgba(0,0,0,0.8)] overflow-hidden group">
-          <img 
-            src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&q=80" 
-            alt="Mughal Diner Experience" 
-            className="w-full h-full object-cover rounded-[26px] brightness-90 group-hover:scale-102 transition-transform duration-700" 
-          />
+      <section className="relative max-w-4xl mx-auto px-6 text-center space-y-6 py-4">
+        <div className="space-y-4">
+          <span className="text-xs font-mono tracking-[0.3em] text-[#D4AF37] uppercase font-bold block">Culinary Pride</span>
+          <h2 className="text-3xl sm:text-4xl font-serif text-white font-bold leading-tight">
+            Crafted by Native Chefs, <br />
+            <span className="gold-gradient-text">Served with Royal Dignity</span>
+          </h2>
         </div>
 
-        <div className="lg:col-span-6 space-y-6">
-          <div className="space-y-2">
-            <span className="text-xs font-mono tracking-[0.3em] text-[#D4AF37] uppercase font-bold block">Section 02 ━ Culinary Pride</span>
-            <h2 className="text-3xl sm:text-4xl font-serif text-white font-bold leading-tight">
-              Crafted by Native Chefs, <br />
-              <span className="gold-gradient-text">Served with Royal Dignity</span>
-            </h2>
+        <p className="text-sm text-slate-300 font-sans font-light leading-relaxed max-w-2xl mx-auto">
+          Our master chefs originate from historical culinary families, utilizing custom spice formulations ground manually each morning. We discard standard food enhancers and seed oils, opting exclusively for cold-pressed brassica oils and pure clarified cream. Savor the authentic taste legacies right here in Markapur.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 max-w-2xl mx-auto text-left">
+          <div className="glass-panel p-4.5 rounded-2xl border border-white/5 space-y-2 bg-stone-950/20">
+            <span className="text-base text-[#D4AF37]">🌾</span>
+            <h4 className="text-xs font-serif text-white uppercase tracking-wider font-bold">Ulavacharu Secrets</h4>
+            <p className="text-[11px] text-slate-400 font-sans">Our signature horse gram cream broth, simmered under slow fire for 16 consecutive hours.</p>
           </div>
-
-          <p className="text-sm text-slate-300 font-sans font-light leading-relaxed">
-            Our master chefs originate from historical culinary families, utilizing custom spice formulations ground manually each morning. We discard standard food enhancers and seed oils, opting exclusively for cold-pressed brassica oils and pure clarified cream. Savor the authentic taste legacies right here in Markapur.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-            <div className="glass-panel p-4.5 rounded-2xl border border-white/5 space-y-2">
-              <span className="text-base text-[#D4AF37]">🌾</span>
-              <h4 className="text-xs font-serif text-white uppercase tracking-wider font-bold">Ulavacharu Secrets</h4>
-              <p className="text-[11px] text-slate-400 font-sans">Our signature horse gram cream broth, simmered under slow fire for 16 consecutive hours.</p>
-            </div>
-            <div className="glass-panel p-4.5 rounded-2xl border border-white/5 space-y-2">
-              <span className="text-base text-[#D4AF37]">🍖</span>
-              <h4 className="text-xs font-serif text-white uppercase tracking-wider font-bold">Hyderabadi Raw Dum</h4>
-              <p className="text-[11px] text-slate-400 font-sans">Meat layers slow-cooked raw under heavy dough seal locks, trapping each aromatic molecule.</p>
-            </div>
-          </div>
-
-          <div className="pt-4">
-            <button
-              onClick={() => onNavigate("menu")}
-              className="py-3 px-6 bg-gradient-to-r from-[#4A0E1A] to-[#7E1C2E] hover:from-[#7E1C2E] hover:to-[#4A0E1A] text-[#D4AF37] border border-[#D4AF37]/35 font-bold text-xs uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md"
-            >
-              <span>Explore Interactive Menu Cards</span>
-              <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
-            </button>
+          <div className="glass-panel p-4.5 rounded-2xl border border-white/5 space-y-2 bg-stone-950/20">
+            <span className="text-base text-[#D4AF37]">🍖</span>
+            <h4 className="text-xs font-serif text-white uppercase tracking-wider font-bold">Hyderabadi Raw Dum</h4>
+            <p className="text-[11px] text-slate-400 font-sans">Meat layers slow-cooked raw under heavy dough seal locks, trapping each aromatic molecule.</p>
           </div>
         </div>
-      </section>
 
-      {/* ==========================================
-          SECTION 4: FEATURED TASTE SPOTLIGHT
-          ========================================== */}
-      <section className="relative max-w-7xl mx-auto px-6 text-left space-y-12">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/5 pb-6">
-          <div className="space-y-1">
-            <span className="text-xs font-mono tracking-[0.2em] text-[#D4AF37] uppercase font-bold block">Royal Spotlight</span>
-            <h2 className="text-3xl sm:text-4xl font-serif text-white font-bold">Signature Masters Platter</h2>
-            <p className="text-xs text-slate-400 font-sans">Our absolute customer favorites. Fresh, authentic, and hand-prepared daily.</p>
-          </div>
+        <div className="pt-4 flex justify-center">
           <button
             onClick={() => onNavigate("menu")}
-            className="px-6 py-3 bg-[#4A0E1A] hover:bg-[#7E1C2E] text-[#D4AF37] text-xs font-mono font-bold tracking-widest uppercase rounded-xl border border-[#D4AF37]/35 transition-all duration-300 cursor-pointer flex items-center gap-2"
+            className="py-3 px-6 bg-gradient-to-r from-[#4A0E1A] to-[#7E1C2E] hover:from-[#7E1C2E] hover:to-[#4A0E1A] text-[#D4AF37] border border-[#D4AF37]/35 font-bold text-xs uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md animate-pulse"
           >
-            <span>View Full Menu Book</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>Explore Interactive Menu Cards</span>
+            <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
           </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Item 1 */}
-          <div className="glass-panel p-4 rounded-3xl border border-white/5 space-y-4 group hover:border-[#D4AF37]/30 transition-all duration-300 text-left bg-black/40">
-            <div className="aspect-square rounded-2xl overflow-hidden relative border border-white/5">
-              <img 
-                src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&q=80" 
-                alt="Biryani" 
-                className="w-full h-full object-cover group-hover:scale-103 transition duration-500" 
-              />
-              <span className="absolute top-3 left-3 bg-[#7E1C2E] text-[#D4AF37] border border-[#D4AF37]/30 text-[9px] font-mono font-bold px-2.5 py-1 rounded-md uppercase">BEST SELLER</span>
-            </div>
-            <div className="space-y-1.5 px-1.5">
-              <h4 className="text-sm font-serif font-bold text-white group-hover:text-[#D4AF37] transition">Ulavacharu Mutton Dum Biryani</h4>
-              <p className="text-[11px] text-zinc-400 font-sans leading-relaxed line-clamp-2">Exquisite local Basmati dum, combined with slow-cooked fermented horse-gram gravy broth and melting country meat chunks.</p>
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-[11px] font-mono text-[#D4AF37]">₹ 310 - 410</span>
-                <span className="text-[9px] text-[#22c55e] font-mono tracking-wider font-bold">🟢 VERIFIED TASTE</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Item 2 */}
-          <div className="glass-panel p-4 rounded-3xl border border-white/5 space-y-4 group hover:border-[#D4AF37]/30 transition-all duration-300 text-left bg-black/40">
-            <div className="aspect-square rounded-2xl overflow-hidden relative border border-white/5">
-              <img 
-                src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" 
-                alt="Tandoor starter" 
-                className="w-full h-full object-cover group-hover:scale-103 transition duration-500" 
-              />
-              <span className="absolute top-3 left-3 bg-[#4A0E1A] text-[#D4AF37] border border-[#D4AF37]/20 text-[9px] font-mono font-bold px-2.5 py-1 rounded-md uppercase">CHEF MUSTS</span>
-            </div>
-            <div className="space-y-1.5 px-1.5">
-              <h4 className="text-sm font-serif font-bold text-white group-hover:text-[#D4AF37] transition">Clay Charcoal Chicken Tikka</h4>
-              <p className="text-[11px] text-zinc-400 font-sans leading-relaxed line-clamp-2">Crispy skin starters, marinated in rich raw yogurt and hand-pounded Kashmiri chilies, baked directly on burning neem wood charcoal.</p>
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-[11px] font-mono text-[#D4AF37]">₹ 240</span>
-                <span className="text-[9px] text-[#22c55e] font-mono tracking-wider font-bold">🟢 REFINED TRADITION</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Item 3 */}
-          <div className="glass-panel p-4 rounded-3xl border border-white/5 space-y-4 group hover:border-[#D4AF37]/30 transition-all duration-300 text-left bg-black/40">
-            <div className="aspect-square rounded-2xl overflow-hidden relative border border-white/5">
-              <img 
-                src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=600&q=80" 
-                alt="paneer" 
-                className="w-full h-full object-cover group-hover:scale-103 transition duration-500" 
-              />
-              <span className="absolute top-3 left-3 bg-[#D4AF37]/20 text-[#FFF2C2] border border-[#D4AF37]/35 text-[9px] font-mono font-bold px-2.5 py-1 rounded-md uppercase">PREMIUM VEG</span>
-            </div>
-            <div className="space-y-1.5 px-1.5">
-              <h4 className="text-sm font-serif font-bold text-white group-hover:text-[#D4AF37] transition">Kaju Cashewnut Paneer Butter</h4>
-              <p className="text-[11px] text-zinc-400 font-sans leading-relaxed line-clamp-2">Delicate cottage cheese blocks bathed in a velvety reduction of tomato concentrate, organic cashew paste and raw butter.</p>
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-[11px] font-mono text-[#D4AF37]">₹ 220 - 240</span>
-                <span className="text-[9px] text-[#22c55e] font-mono tracking-wider font-bold">🟢 VEGETARIAN HARMONY</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Item 4 */}
-          <div className="glass-panel p-4 rounded-3xl border border-white/5 space-y-4 group hover:border-[#D4AF37]/30 transition-all duration-300 text-left bg-black/40">
-            <div className="aspect-square rounded-2xl overflow-hidden relative border border-white/5">
-              <img 
-                src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=600&q=80" 
-                alt="apricot delight" 
-                className="w-full h-full object-cover group-hover:scale-103 transition duration-500" 
-              />
-              <span className="absolute top-3 left-3 bg-[#7E1C2E] text-[#D4AF37] border border-[#D4AF37]/30 text-[9px] font-mono font-bold px-2.5 py-1 rounded-md uppercase font-bold">LEGENDARY dessert</span>
-            </div>
-            <div className="space-y-1.5 px-1.5">
-              <h4 className="text-sm font-serif font-bold text-white group-hover:text-[#D4AF37] transition">Authentic Qubani Ka Meetha</h4>
-              <p className="text-[11px] text-zinc-400 font-sans leading-relaxed line-clamp-2">Dried royal apricot compote slow stewed till rich mahogany amber, topped with pure raw almond kernels and fresh organic cream.</p>
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-[11px] font-mono text-[#D4AF37]">₹ 140</span>
-                <span className="text-[9px] text-[#22c55e] font-mono tracking-wider font-bold">🟢 ROYAL FINALE</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* ==========================================
           SECTION 5: GUEST TESTIMONIALS & RATING BOARD
           ========================================== */}
-      <section className="relative text-left max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-8">
+      <section className="relative text-left max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-8 font-sans">
         
         {/* Left Testimonials list (7 cols) */}
         <div className="lg:col-span-7 space-y-8">
@@ -762,70 +650,6 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
               Share Review on Google Maps
             </a>
           </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          SECTION 6: RESERVATION EXPERIENCE INLINE
-          ========================================== */}
-      <section className="relative max-w-4xl mx-auto px-6">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#4A0E1A]/10 to-[#D4AF37]/5 rounded-[32px] blur-3xl pointer-events-none" />
-        
-        <div className="glass-panel p-8 sm:p-12 rounded-[32px] border border-[#D4AF37]/30 text-center relative overflow-hidden bg-black/60 shadow-2xl space-y-6">
-          <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#D4AF37]/5 to-transparent blur-2xl pointer-events-none" />
-          
-          <div className="space-y-2">
-            <span className="text-xs font-mono tracking-[0.3em] text-[#D4AF37] uppercase font-bold block">Section 06 ━ Fast Reservations</span>
-            <h2 className="text-3xl sm:text-4xl font-serif text-white font-heavy">Initiate Banquet Bookings</h2>
-            <p className="text-sm text-slate-300 font-sans max-w-xl mx-auto">
-              Ready to claim pricing details and block wedding or special dining slots? Choose function metrics to load our scheduling console instantly.
-            </p>
-          </div>
-
-          <form onSubmit={handleQuickWizardSubmit} className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left max-w-2xl mx-auto pt-4">
-            <div>
-              <label className="text-[10px] font-mono text-slate-400 block mb-1 uppercase font-bold">Function Category</label>
-              <select 
-                value={wizardEvent} 
-                onChange={(e) => setWizardEvent(e.target.value)}
-                className="w-full p-3 bg-stone-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
-              >
-                <option value="wedding">Grand Royal Wedding</option>
-                <option value="reception">Premium Reception Show</option>
-                <option value="engagement">Engagement Rituals</option>
-                <option value="anniversary">Pre-Wedding Sangeet</option>
-                <option value="corporate">Corporate Gala Assembly</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="text-[10px] font-mono text-slate-400 block mb-1 uppercase font-bold">Estimated Guests</label>
-              <select 
-                value={wizardGuests} 
-                onChange={(e) => setWizardGuests(parseInt(e.target.value))}
-                className="w-full p-3 bg-stone-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
-              >
-                <option value="100">Intimate (Up to 100 Guests)</option>
-                <option value="300">Generous (100 - 300 Guests)</option>
-                <option value="500">Majestic (300 - 500 Guests)</option>
-                <option value="1000">Imperial (500 - 1000 Guests)</option>
-              </select>
-            </div>
-
-            <div className="flex items-end">
-              <button 
-                type="submit"
-                className="w-full py-3 bg-gradient-to-r from-[#D4AF37] to-[#A3791E] hover:from-[#FFF2C2] hover:to-[#D4AF37] text-black text-xs font-bold uppercase tracking-widest rounded-xl shadow-[0_5px_15px_rgba(212,175,55,0.2)] transition active:scale-98 cursor-pointer flex items-center justify-center gap-2"
-              >
-                <span>Initiate Booking</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </form>
-
-          <p className="text-[10px] font-mono text-slate-500 leading-normal pt-4">
-            Security advisory: Generous booking variables are saved locally and synced live across cloud firestores dynamically.
-          </p>
         </div>
       </section>
 

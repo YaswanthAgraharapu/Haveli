@@ -238,6 +238,16 @@ export default function App() {
                   <span>🎫</span> <span>VIP Table Booking</span>
                 </button>
               </li>
+              <li>
+                <a 
+                  href="https://www.zomato.com/markapur/kings-haveli-markapur-locality/order"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-[#E23744] hover:underline transition duration-300 text-left cursor-pointer flex items-center gap-2"
+                >
+                  <span>🚴</span> <span>Order on Zomato</span>
+                </a>
+              </li>
             </ul>
           </div>
 

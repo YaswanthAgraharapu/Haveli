@@ -134,6 +134,15 @@ export default function Hero({ onBookNowClick, onAdminClick }: { onBookNowClick:
               </button>
               
               <a
+                href="https://www.zomato.com/markapur/kings-haveli-markapur-locality/order"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-7 py-3.5 bg-[#E23744] hover:bg-[#E23744]/90 text-white font-mono tracking-widest text-xs uppercase font-bold rounded-xl hover:shadow-lg hover:shadow-[#E23744]/25 active:scale-95 transition-all duration-300 cursor-pointer"
+              >
+                🚴 Order on Zomato
+              </a>
+              
+              <a
                 href="#menu_showcase_section"
                 className="flex items-center gap-1.5 px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 font-sans text-xs tracking-wider uppercase font-semibold rounded-xl active:scale-95 transition-all duration-300"
               >
