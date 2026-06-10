@@ -15,10 +15,10 @@ export interface MenuCategory {
   items: MenuItem[];
 }
 
-export const RESTAURANT_NAME = "Haveli Restaurant And Banquet Hall";
+export const RESTAURANT_NAME = "Haveli Banquet Hall And Restaurant";
 export const GOOGLE_RATING = "4.0/5 (383 reviews)";
 export const CONTACT_PHONES = ["9985084847", "7981562535", "7013220053"];
-export const GOOGLE_MAPS_URL = "https://www.google.com/maps/place/Haveli+Banquet+Hall+And+Restaurant/@15.7336518,79.2661507,17z";
+export const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/WLeMQ6w6LB3CdikF7";
 
 // Clean extracted menu matching categories requested
 export const menuCategories: MenuCategory[] = [
@@ -363,12 +363,12 @@ export const structuredJsonOutput = {
 
 // SEO Metadata and website copy
 export const seoContent = {
-  metaTitle: "Haveli Restaurant And Banquet Hall - Authentic Royal Dining",
-  metaDescription: "Welcome to Haveli Restaurant And Banquet Hall. Savor our exquisite authentic biryani, clay tandoor starters and traditional Coastal curries. Rated 4.0/5 with 383 reviews. Book table today!",
-  seoKeywords: "Haveli Restaurant And Banquet Hall, Haveli Banquet Hall, Haveli Restaurant, restaurants in Markapur, luxury dining Markapur, authentic biryani, banquet hall near me, tandoori chicken, Ulavacharu biryani",
-  restaurantDescription: "Haveli Restaurant And Banquet Hall is Markapur's premier dining and celebrations destination, celebrated for its state-of-the-art golden red Royal Mughal themes, visual grandeur, and exquisite authentic taste. Spanning a massive area with a premium multi-cuisine menu and elegant spacious banquet facilities, we carry the legacy of fine Indian culinary heritage. Every dish is cooked by experienced native chefs using hand-pounded spices, cold-pressed oils, and high-quality local ingredients.",
+  metaTitle: "Haveli Banquet Hall And Restaurant - Authentic Royal Dining",
+  metaDescription: "Welcome to Haveli Banquet Hall And Restaurant. Savor our exquisite authentic biryani, clay tandoor starters and traditional Coastal curries. Rated 4.0/5 with 383 reviews. Book table today!",
+  seoKeywords: "Haveli Banquet Hall And Restaurant, Haveli Banquet Hall, Haveli Restaurant, restaurants in Markapur, luxury dining Markapur, authentic biryani, banquet hall near me, tandoori chicken, Ulavacharu biryani",
+  restaurantDescription: "Haveli Banquet Hall And Restaurant is Markapur's premier dining and celebrations destination, celebrated for its state-of-the-art golden red Royal Mughal themes, visual grandeur, and exquisite authentic taste. Spanning a massive area with a premium multi-cuisine menu and elegant spacious banquet facilities, we carry the legacy of fine Indian culinary heritage. Every dish is cooked by experienced native chefs using hand-pounded spices, cold-pressed oils, and high-quality local ingredients.",
   
-  overviewText: "Nestled Opp. RTC Bus stand (Register Office Line, N.S Nagar) in Markapur, Haveli Restaurant And Banquet Hall stands as a majestic beacon of architectural grandeur and epicurean legacy. Melding royal Indian 'Haveli' themes with burgundy-red high-contrast luxury, this landmark has earned an impressive 4.0/5 Google Rating from 383 passionate local reviewers. With dual-functioning capabilities as an upscale family diner and a spacious, premium high-capacity banquet hall, it caters to everything from intimate candlelight dinners to grand golden wedding parties. Our multi-cuisine kitchen specializes in charcoal-baked clay tandoor starters, authentic Hyderabadi dum biryani, and legendary local Andhra masterpieces (such as NTR Ruchulu Kodikura and fermented Horse Gram 'Ulavacharu' gravies). Discover a celebration space where heritage meets culinary precision, offering an unforgettable royal experience.",
+  overviewText: "Nestled Opp. RTC Bus stand (Register Office Line, N.S Nagar) in Markapur, Haveli Banquet Hall And Restaurant stands as a majestic beacon of architectural grandeur and epicurean legacy. Melding royal Indian 'Haveli' themes with burgundy-red high-contrast luxury, this landmark has earned an impressive 4.0/5 Google Rating from 383 passionate local reviewers. With dual-functioning capabilities as an upscale family diner and a spacious, premium high-capacity banquet hall, it caters to everything from intimate candlelight dinners to grand golden wedding parties. Our multi-cuisine kitchen specializes in charcoal-baked clay tandoor starters, authentic Hyderabadi dum biryani, and legendary local Andhra masterpieces (such as NTR Ruchulu Kodikura and fermented Horse Gram 'Ulavacharu' gravies). Discover a celebration space where heritage meets culinary precision, offering an unforgettable royal experience.",
 
   topRecommended: [
     { name: "Ulavacharu Chicken/Mutton Biryani", price: "310 - 410", description: "Our ultimate house specialty, cooked with rich fermented horse-gram cream and long-grain premium basmati." },

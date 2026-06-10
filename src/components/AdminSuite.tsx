@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import { Booking } from "./BookingSystem";
+import { auth } from "../lib/firebase";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 
 export interface Log {
   id: string;
@@ -70,7 +72,64 @@ const compressAndGetBase64 = (file: File): Promise<string> => {
 };
 
 export default function AdminSuite() {
-  const [isAuthorized, setIsAuthorized] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPasswordInput, setAdminPasswordInput] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+
+  // Monitor auth state changes in real-time
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setAuthChecking(false);
+      if (user) {
+        setIsAuthorized(true);
+        loadData();
+        fetchAdminMenu();
+      } else {
+        setIsAuthorized(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleEmailPasswordLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setIsLoggingIn(true);
+    try {
+      await signInWithEmailAndPassword(auth, adminEmail, adminPasswordInput);
+      setAdminPasswordInput("");
+      appendSystemLog(`Security Authentication: Admin logged in successfully with email ${adminEmail}.`);
+    } catch (err: any) {
+      console.error("Login failure:", err);
+      let message = "Incorrect credentials combination. Please verify your admin email and password.";
+      if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password") {
+        message = "Incorrect password or email. Authentication rejected.";
+      } else if (err.code === "auth/user-not-found") {
+        message = "No admin user found with this email.";
+      } else if (err.code === "auth/invalid-email") {
+        message = "Please enter a valid email address.";
+      } else {
+        message = err.message || message;
+      }
+      setAuthError(message);
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setIsAuthorized(false);
+      appendSystemLog("Security Authentication: Admin manually logged out from Owner Suite.");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+
   const [adminPhone, setAdminPhone] = useState("8247733059");
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState("");
@@ -106,8 +165,8 @@ export default function AdminSuite() {
     phone3: "70132 20053",
     timings: "11:00 AM - 11:00 PM",
     address: "Opp. RTC Bus stand, Register Office Line, N.S Nagar, Markapur, Andhra Pradesh, 523316, IN",
-    googleMapsUrl: "https://www.google.com/maps/place/Haveli+Banquet+Hall+And+Restaurant/@15.7336518,79.2661507,17z",
-    restaurantName: "Haveli Restaurant And Banquet Hall"
+    googleMapsUrl: "https://maps.app.goo.gl/WLeMQ6w6LB3CdikF7",
+    restaurantName: "Haveli Banquet Hall And Restaurant"
   });
 
   // Dynamic category editor forms states
@@ -631,34 +690,93 @@ export default function AdminSuite() {
 
   const totalGuests = bookings.reduce((acc, b) => acc + b.guestsCount, 0);
 
-  // RENDER CONTROLLED LOG REGISTRATION LOCK OUT SCREEN (No password printed, derived from name)
+  // If verifying auth state
+  if (authChecking) {
+    return (
+      <div className="min-h-[400px] flex flex-col items-center justify-center space-y-4 font-sans">
+        <RefreshCw className="w-8 h-8 text-[#800E14] animate-spin" />
+        <span className="text-xs font-mono text-gray-500 uppercase tracking-wider">Verifying Administrator Token...</span>
+      </div>
+    );
+  }
+
+  // RENDER FIRM SECURE FIREBASE ADMIN EMAIL/PASSWORD LOGIN SCREEN
   if (!isAuthorized) {
     return (
-      <div id="admin_credentials_lock" className="my-12 max-w-lg mx-auto bg-gradient-to-b from-[#3e0508] via-[#800E14] to-[#3e0508] rounded-3xl border-[#EAC775] p-8 shadow-2xl text-center text-white relative overflow-hidden">
+      <div id="admin_credentials_lock" className="my-12 max-w-md mx-auto bg-[#0b1528] rounded-3xl border border-[#EAC775]/30 p-8 shadow-2xl text-center text-white relative overflow-hidden font-sans">
         <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/5 rounded-full blur-2xl pointer-events-none"></div>
         
         <div className="flex justify-center mb-6">
           <BrandLogo variant="vertical" iconSize="lg" />
         </div>
 
-        <h3 className="text-xl font-serif text-[#EAC775] font-black tracking-widest mb-1 flex items-center justify-center gap-1.5 uppercase">
-          <Lock className="w-5 h-5 text-[#EAC775]" /> Direct Admin Access
+        <h3 className="text-xl font-serif text-[#EAC775] font-black tracking-widest mb-1 flex items-center justify-center gap-2 uppercase">
+          <Shield className="w-5 h-5 text-[#EAC775]" /> Owner Portal
         </h3>
         <p className="text-xs text-slate-300 mb-6 font-sans leading-relaxed">
-          The security credentials wall has been fully removed. You can now access the Haveli Owner suite directly.
+          Secure Administrative Gateway for Haveli Banquet Hall And Restaurant owner credentials.
         </p>
 
-        <button
-          type="button"
-          onClick={() => {
-            setIsAuthorized(true);
-            loadData();
-            fetchAdminMenu();
-          }}
-          className="w-full p-4 bg-[#EAC775] text-zinc-900 hover:bg-white font-black text-xs uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md transform hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2"
-        >
-          Enter Owner Suite Directly
-        </button>
+        {authError && (
+          <div className="p-3 mb-4 bg-red-950/80 text-red-300 border border-red-500/30 text-xs rounded-xl font-medium text-left flex items-start gap-2">
+            <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
+            <span>{authError}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleEmailPasswordLogin} className="space-y-4 text-left">
+          <div>
+            <label className="text-[10px] font-mono uppercase text-slate-300 font-bold block mb-1">
+              Admin Email Address
+            </label>
+            <input
+              type="email"
+              placeholder="admin@haveli-restaurant.com"
+              required
+              value={adminEmail}
+              onChange={(e) => setAdminEmail(e.target.value)}
+              className="w-full p-3 text-xs bg-white/5 border border-slate-700 rounded-xl focus:border-[#EAC775] focus:outline-none focus:ring-1 focus:ring-[#EAC775] text-white"
+            />
+          </div>
+
+          <div>
+            <label className="text-[10px] font-mono uppercase text-slate-300 font-bold block mb-1">
+              Owner Security Password
+            </label>
+            <input
+              type="password"
+              placeholder="••••••••••••"
+              required
+              value={adminPasswordInput}
+              onChange={(e) => setAdminPasswordInput(e.target.value)}
+              className="w-full p-3 text-xs bg-white/5 border border-slate-700 rounded-xl focus:border-[#EAC775] focus:outline-none focus:ring-1 focus:ring-[#EAC775] text-white"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoggingIn}
+            className="w-full mt-2 p-3.5 bg-[#800E14] text-[#EAC775] hover:bg-[#800E14]/90 font-bold text-xs uppercase tracking-widest rounded-xl transition duration-350 shadow-md transform hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2 disabled:opacity-55"
+          >
+            {isLoggingIn ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin text-[#EAC775]" />
+                <span>Authorizing Identity...</span>
+              </>
+            ) : (
+              <>
+                <Lock className="w-4 h-4 text-[#EAC775]" />
+                <span>Verify & Enter Suite</span>
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="mt-6 border-t border-slate-800/80 pt-4">
+          <p className="text-[10px] font-mono text-slate-400 text-center leading-relaxed">
+            Note: Admin user accounts are managed directly inside the Firebase Console. Ask the administrator to provision security tokens.
+          </p>
+        </div>
       </div>
     );
   }
@@ -687,7 +805,7 @@ export default function AdminSuite() {
             <RefreshCw className="w-4 h-4" />
           </button>
           <button 
-            onClick={() => setIsAuthorized(false)}
+            onClick={handleLogout}
             className="p-1.5 px-4 bg-[#0b1528] hover:bg-[#0b1528]/80 text-[#FAF6F0] text-xs font-mono rounded-lg transition cursor-pointer"
           >
             Log Out Safe

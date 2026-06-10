@@ -103,7 +103,7 @@ export default function Hero({ onBookNowClick, onAdminClick }: { onBookNowClick:
             </div>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl font-sans">
-              Welcome to <span className="text-white font-semibold">Haveli Restaurant And Banquet Hall</span>. Celebrated as Markapur's center of epicurean luxury, we serve authentic clay-charred tandoor starters, supreme Hyderabadi biryani, and native coastal curries within a state-of-the-art gold & burgundy themed visual space.
+              Welcome to <span className="text-white font-semibold">Haveli Banquet Hall And Restaurant</span>. Celebrated as Markapur's center of epicurean luxury, we serve authentic clay-charred tandoor starters, supreme Hyderabadi biryani, and native coastal curries within a state-of-the-art gold & burgundy themed visual space.
             </p>
 
             {/* Micro details row */}

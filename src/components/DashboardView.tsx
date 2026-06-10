@@ -87,8 +87,8 @@ export default function DashboardView({ onNavigate, onAdminClick }: DashboardVie
     phone3: "70132 20053",
     timings: "11:00 AM - 11:00 PM",
     address: "Opp. RTC Bus stand, Register Office Line, N.S Nagar, Markapur, Andhra Pradesh, 523316, IN",
-    googleMapsUrl: "https://www.google.com/maps/place/Haveli+Banquet+Hall+And+Restaurant/@15.7336518,79.2661507,17z",
-    restaurantName: "Haveli Restaurant And Banquet Hall"
+    googleMapsUrl: "https://maps.app.goo.gl/WLeMQ6w6LB3CdikF7",
+    restaurantName: "Haveli Banquet Hall And Restaurant"
   });
 
   const [featuredImage, setFeaturedImage] = useState("https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=1000&q=80");

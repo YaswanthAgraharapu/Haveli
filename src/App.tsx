@@ -173,7 +173,7 @@ export default function App() {
 
         {/* Co-signature credits */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-white/5 text-center text-[11px] text-slate-500 font-mono flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© 2026 Haveli Restaurant And Banquet Hall. All rights reserved.</p>
+          <p>© 2026 Haveli Banquet Hall And Restaurant. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Crafted with royal standards & authentic pride <Heart className="w-3 h-3 text-red-600 fill-red-600" />
           </p>
