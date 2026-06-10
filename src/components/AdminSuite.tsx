@@ -811,30 +811,31 @@ export default function AdminSuite() {
 
   // RENDER DYNAMIC DASHBOARD
   return (
-    <div id="admin_authorized_panel" className="bg-[#12223c]/5 rounded-2xl border border-[#EAC775]/20 p-6 md:p-8 my-10">
+    <div id="admin_authorized_panel" className="bg-[#0b1528] rounded-3xl border border-[#EAC775]/30 p-6 md:p-8 my-10 text-white relative overflow-hidden font-sans shadow-2xl">
+      <div className="absolute top-0 right-0 w-48 h-48 bg-amber-200/5 rounded-full blur-3xl pointer-events-none"></div>
       
       {/* Title block */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-5 mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-5 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 px-2.5 rounded-full text-red-800 bg-red-100 font-bold font-mono text-[9px] uppercase">
+            <span className="p-1 px-2.5 rounded-full text-red-200 bg-red-950/60 border border-red-500/20 font-bold font-mono text-[9px] uppercase">
               Ownership Console Live
             </span>
-            <span className="text-xs font-mono text-gray-400">Database Engine connected in Real-Time</span>
+            <span className="text-xs font-mono text-slate-400">Database Engine connected in Real-Time</span>
           </div>
-          <h2 className="text-2xl font-serif text-[#0b1528] font-black">{settings.restaurantName} - Admin Suite</h2>
+          <h2 className="text-2xl font-serif text-[#EAC775] font-black">{settings.restaurantName} - Admin Suite</h2>
         </div>
         <div className="flex gap-2">
           <button 
             onClick={() => { loadData(); appendSystemLog("Manual datastore synchronize requested."); }}
-            className="p-2 bg-white hover:bg-slate-50 text-gray-650 rounded-lg border shadow-xs transition cursor-pointer"
+            className="p-2 bg-slate-905 hover:bg-slate-900 border border-slate-800 text-slate-300 rounded-lg shadow-xs transition cursor-pointer"
             title="Refresh Data"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
           <button 
             onClick={handleLogout}
-            className="p-1.5 px-4 bg-[#0b1528] hover:bg-[#0b1528]/80 text-[#FAF6F0] text-xs font-mono rounded-lg transition cursor-pointer"
+            className="p-1.5 px-4 bg-[#800E14] hover:bg-[#800E14]/80 text-[#FAF6F0] text-xs font-mono rounded-lg transition cursor-pointer"
           >
             Log Out Safe
           </button>
@@ -843,45 +844,45 @@ export default function AdminSuite() {
 
       {/* Grid: 3 Stats widgets */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-xl border border-gray-150 shadow-xs flex items-center justify-between text-left">
+        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 shadow-xs flex items-center justify-between text-left">
           <div>
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Live Bookings</span>
-            <span className="text-2xl font-serif block text-[#0b1528] font-bold mt-1">{bookings.length} Passes</span>
+            <span className="text-[10px] font-mono text-slate-400 uppercase">Live Bookings</span>
+            <span className="text-2xl font-serif block text-white font-bold mt-1">{bookings.length} Passes</span>
           </div>
-          <div className="w-10 h-10 bg-[#FAF6F0] text-[#EAC775] rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#FAF6F0]/10 text-[#EAC775] rounded-full flex items-center justify-center border border-[#EAC775]/25">
             <Calendar className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-gray-150 shadow-xs flex items-center justify-between text-left">
+        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 shadow-xs flex items-center justify-between text-left">
           <div>
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Cover Heads</span>
-            <span className="text-2xl font-serif block text-[#0b1528] font-bold mt-1">{totalGuests} Guests</span>
+            <span className="text-[10px] font-mono text-slate-400 uppercase">Cover Heads</span>
+            <span className="text-2xl font-serif block text-white font-bold mt-1">{totalGuests} Guests</span>
           </div>
-          <div className="w-10 h-10 bg-[#FAF6F0] text-purple-700 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#FAF6F0]/10 text-purple-400 rounded-full flex items-center justify-center border border-purple-500/20">
             <TrendingUp className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-gray-150 shadow-xs flex items-center justify-between text-left">
+        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 shadow-xs flex items-center justify-between text-left">
           <div>
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Audit Records</span>
-            <span className="text-2xl font-serif block text-[#0b1528] font-bold mt-1">{logs.length} System events</span>
+            <span className="text-[10px] font-mono text-slate-400 uppercase">Audit Records</span>
+            <span className="text-2xl font-serif block text-white font-bold mt-1">{logs.length} System events</span>
           </div>
-          <div className="w-10 h-10 bg-red-50 text-red-500 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-red-950/40 text-red-400 rounded-full flex items-center justify-center border border-red-500/20">
             <Activity className="w-5 h-5 animate-spin" />
           </div>
         </div>
       </div>
 
       {/* Tab bar */}
-      <div className="flex border-b border-gray-250 mb-6 gap-2 overflow-x-auto pb-1">
+      <div className="flex border-b border-white/10 mb-6 gap-2 overflow-x-auto pb-1">
         <button
           onClick={() => setAdminActiveTab("dashboard")}
           className={`px-4 py-2 text-xs whitespace-nowrap uppercase font-mono tracking-wider font-bold border-b-2 transition-all cursor-pointer ${
             adminActiveTab === "dashboard"
-              ? "border-[#EAC775] text-[#0b1528] font-black"
-              : "border-transparent text-gray-500 hover:text-gray-800"
+              ? "border-[#EAC775] text-[#EAC775] font-black"
+              : "border-transparent text-slate-400 hover:text-white"
           }`}
         >
           📊 Stats & Core Settings
@@ -890,21 +891,11 @@ export default function AdminSuite() {
           onClick={() => setAdminActiveTab("menu")}
           className={`px-4 py-2 text-xs whitespace-nowrap uppercase font-mono tracking-wider font-bold border-b-2 transition-all cursor-pointer ${
             adminActiveTab === "menu"
-              ? "border-[#EAC775] text-[#0b1528] font-black"
-              : "border-transparent text-gray-500 hover:text-gray-800"
+              ? "border-[#EAC775] text-[#EAC775] font-black"
+              : "border-transparent text-slate-400 hover:text-white"
           }`}
         >
           🍱 Live Menu & Categories
-        </button>
-        <button
-          onClick={() => setAdminActiveTab("gallery")}
-          className={`px-4 py-2 text-xs whitespace-nowrap uppercase font-mono tracking-wider font-bold border-b-2 transition-all cursor-pointer ${
-            adminActiveTab === "gallery"
-              ? "border-[#EAC775] text-[#0b1528] font-black"
-              : "border-transparent text-gray-500 hover:text-gray-800"
-          }`}
-        >
-          🖼️ Gallery Manager
         </button>
       </div>
 
@@ -916,24 +907,24 @@ export default function AdminSuite() {
           <div className="lg:col-span-5 space-y-6">
             
             {/* CARD 1: SPECIAL DEALS */}
-            <div className="bg-white rounded-xl border border-[#EAC775]/30 p-6 shadow-xs space-y-4 text-left">
-              <div className="flex items-center gap-2 border-b pb-2 mb-2">
+            <div className="bg-slate-900/60 rounded-xl border border-white/5 p-6 shadow-xs space-y-4 text-left">
+              <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-2">
                 <Shield className="w-4.5 h-4.5 text-[#EAC775]" />
-                <span className="font-bold font-serif text-[#0b1528]">Special of the Day Creator</span>
+                <span className="font-bold font-serif text-white">Special of the Day Creator</span>
               </div>
               
-              <p className="text-xs text-gray-500 leading-normal">
+              <p className="text-xs text-slate-400 leading-normal">
                 Customize promotional headlines and recommendations according to the weekday. These values will synchronize dynamically onto the customer's dashboard!
               </p>
 
               <form onSubmit={(e) => { e.preventDefault(); handleAnnouncementRegen(); }} className="space-y-3 text-xs">
                 <div>
-                  <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Target Day</label>
+                  <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Target Day</label>
                   <select 
                     name="dayOfWeek" 
                     value={dailyDeal.dayOfWeek}
                     onChange={handleDealChange}
-                    className="w-full p-2 rounded-md border bg-slate-50"
+                    className="w-full p-2.5 rounded-md border border-slate-850 bg-[#060608] text-white focus:outline-none focus:border-[#EAC775]"
                   >
                     <option>Monday</option>
                     <option>Tuesday</option>
@@ -947,52 +938,52 @@ export default function AdminSuite() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Campaign/Deal Title</label>
+                  <label className="text-[10px] font-mono uppercase text-[#EAC775] block mb-1 font-bold">Campaign/Deal Title</label>
                   <input 
                     type="text" 
                     name="offerTitle"
                     value={dailyDeal.offerTitle}
                     onChange={handleDealChange}
                     placeholder="E.g. Shahi Kebab Craze"
-                    className="w-full p-2.5 rounded border bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-800 bg-[#060608] text-white focus:outline-none focus:border-[#EAC775]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Deal Rate</label>
+                    <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Deal Rate</label>
                     <input 
                       type="text" 
                       name="discountRate"
                       value={dailyDeal.discountRate}
                       onChange={handleDealChange}
-                      placeholder="E.g. 15% Off / Complimentary Drinks"
-                      className="w-full p-2.5 rounded border bg-white"
+                      placeholder="E.g. 15% Off"
+                      className="w-full p-2.5 rounded-lg border border-slate-800 bg-[#060608] text-white focus:outline-none focus:border-[#EAC775]"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Special Recommendation</label>
+                    <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Special Recommendation</label>
                     <input 
                       type="text" 
                       name="specialRecommendation"
                       value={dailyDeal.specialRecommendation}
                       onChange={handleDealChange}
                       placeholder="E.g. Chicken Tandoori Platter"
-                      className="w-full p-2.5 rounded border bg-white"
+                      className="w-full p-2.5 rounded-lg border border-slate-800 bg-[#060608] text-white focus:outline-none focus:border-[#EAC775]"
                     />
                   </div>
                 </div>
 
-                <div className="bg-[#FAF6F0] p-3 rounded border border-[#EAC775]/30">
+                <div className="bg-black/40 p-3 rounded-lg border border-slate-800/80">
                   <span className="text-[9px] font-mono font-bold text-[#EAC775] uppercase block mb-1">Preview Marquee Headline</span>
-                  <p className="text-[11px] text-[#0b1528] italic font-medium leading-relaxed">
+                  <p className="text-[11px] text-white italic font-medium leading-relaxed">
                     "{dailyDeal.activeAnnouncement}"
                   </p>
                 </div>
 
                 <button 
                   type="submit"
-                  className="w-full py-2.5 bg-[#0b1528] hover:bg-[#0b1528]/90 text-white font-semibold rounded-lg text-xs tracking-wider uppercase transition cursor-pointer shadow-xs"
+                  className="w-full py-2.5 bg-[#800E14] hover:bg-[#800E14]/90 text-white font-semibold rounded-lg text-xs tracking-wider uppercase transition cursor-pointer shadow-xs"
                 >
                   🔄 Refresh Live Specials Marquee
                 </button>
@@ -1000,46 +991,46 @@ export default function AdminSuite() {
             </div>
 
             {/* CARD 2: REAL-TIME RESTAURANT SETTINGS */}
-            <div className="bg-white rounded-xl border border-[#EAC775]/30 p-6 shadow-xs space-y-4 text-left">
-              <div className="flex items-center gap-2 border-b pb-2 mb-1">
+            <div className="bg-slate-900/60 rounded-xl border border-white/5 p-6 shadow-xs space-y-4 text-left">
+              <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-1">
                 <Coffee className="w-4.5 h-4.5 text-[#EAC775]" />
-                <span className="font-bold font-serif text-[#0b1528]">Live Contact Lines & Timings</span>
+                <span className="font-bold font-serif text-white">Live Contact Lines & Timings</span>
               </div>
               
-              <p className="text-xs text-gray-500 leading-normal">
+              <p className="text-xs text-slate-400 leading-normal">
                 Directly adjust contact phone numbers, working hours, and maps URL. These values synchronize immediately onto the front-page widgets of Haveli in real-time.
               </p>
 
               <form onSubmit={handleSaveSettingsSubmit} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Restaurant Display Name</label>
+                  <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Restaurant Display Name</label>
                   <input 
                     type="text" 
                     value={settings.restaurantName}
                     onChange={(e) => setSettings({ ...settings, restaurantName: e.target.value })}
-                    className="w-full p-2 rounded border bg-white"
+                    className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg focus:outline-none focus:border-[#EAC775]"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Primary WhatsApp Line</label>
+                    <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Primary WhatsApp Line</label>
                     <input 
                       type="text" 
                       value={settings.phone1}
                       onChange={(e) => setSettings({ ...settings, phone1: e.target.value })}
-                      className="w-full p-2 rounded border bg-white font-mono"
+                      className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg font-mono focus:outline-none focus:border-[#EAC775]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Helpline Order Line</label>
+                    <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Helpline Order Line</label>
                     <input 
                       type="text" 
                       value={settings.phone2}
                       onChange={(e) => setSettings({ ...settings, phone2: e.target.value })}
-                      className="w-full p-2 rounded border bg-white font-mono"
+                      className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg font-mono focus:outline-none focus:border-[#EAC775]"
                       required
                     />
                   </div>
@@ -1047,52 +1038,52 @@ export default function AdminSuite() {
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Direct UPI Pay Number</label>
+                    <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Direct UPI Pay Number</label>
                     <input 
                       type="text" 
                       value={settings.phone3}
                       onChange={(e) => setSettings({ ...settings, phone3: e.target.value })}
-                      className="w-full p-2 rounded border bg-white font-mono"
+                      className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg font-mono focus:outline-none focus:border-[#EAC775]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Standard Timing Hours</label>
+                    <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Standard Timing Hours</label>
                     <input 
                       type="text" 
                       value={settings.timings}
                       onChange={(e) => setSettings({ ...settings, timings: e.target.value })}
-                      className="w-full p-2 rounded border bg-white font-mono"
+                      className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg font-mono focus:outline-none focus:border-[#EAC775]"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Physical Landmark Address</label>
+                  <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Physical Landmark Address</label>
                   <input 
                     type="text" 
                     value={settings.address}
                     onChange={(e) => setSettings({ ...settings, address: e.target.value })}
-                    className="w-full p-2 rounded border bg-white"
+                    className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg focus:outline-none focus:border-[#EAC775]"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono uppercase text-gray-500 block mb-1 font-bold">Google Maps Coordinates URL</label>
+                  <label className="text-[10px] font-mono uppercase text-slate-400 block mb-1 font-bold">Google Maps Coordinates URL</label>
                   <input 
                     type="text" 
                     value={settings.googleMapsUrl}
                     onChange={(e) => setSettings({ ...settings, googleMapsUrl: e.target.value })}
-                    className="w-full p-2 rounded border bg-white"
+                    className="w-full p-2.5 bg-[#060608] border border-slate-800 text-white rounded-lg focus:outline-none focus:border-[#EAC775]"
                     required
                   />
                 </div>
 
                 <button 
                   type="submit"
-                  className="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-lg text-xs tracking-wider uppercase transition cursor-pointer shadow-sm"
+                  className="w-full py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white font-semibold rounded-lg text-xs tracking-wider uppercase transition cursor-pointer shadow-sm"
                 >
                   💾 Save Live Settings & Phones
                 </button>
@@ -1100,33 +1091,33 @@ export default function AdminSuite() {
             </div>
 
             {/* CARD 3: SECURITY PROTOCOLS */}
-            <div className="bg-white rounded-xl border border-red-700/20 p-6 shadow-xs space-y-4 text-left">
-              <div className="flex items-center gap-2 border-b pb-2 mb-1">
-                <Shield className="w-4.5 h-4.5 text-red-700" />
-                <span className="font-bold font-serif text-[#0b1528]">Console Authentication Status</span>
+            <div className="bg-slate-900/60 rounded-xl border border-red-950/40 p-6 shadow-xs space-y-4 text-left">
+              <div className="flex items-center gap-2 border-b border-red-950/50 pb-2 mb-1">
+                <Shield className="w-4.5 h-4.5 text-red-500" />
+                <span className="font-bold font-serif text-white">Console Authentication Status</span>
               </div>
               
-              <div className="p-3 bg-red-50/50 rounded-xl border border-red-100 flex items-start gap-2.5">
-                <ShieldAlert className="w-4 h-4 text-red-700 shrink-0 mt-0.5" />
+              <div className="p-3 bg-red-950/20 rounded-xl border border-red-500/10 flex items-start gap-2.5">
+                <ShieldAlert className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <span className="text-xs font-bold text-[#0b1528] block">Firebase Auth Active</span>
-                  <p className="text-[11px] text-gray-550 leading-normal">
-                    Staff authentication is integrated with Google Firebase. Access is restricted to authorized Gmail addresses and security passwords.
+                  <span className="text-xs font-bold text-red-200 block">Firebase Auth Active</span>
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    Staff authentication is integrated with Google Firebase. Access is restricted to authorized credentials.
                   </p>
                 </div>
               </div>
 
               <div className="space-y-3.5 text-xs">
-                <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                  <span className="text-[10px] font-mono uppercase text-gray-400 block mb-1">Ownership Registered Mobile</span>
+                <div className="bg-black/35 p-3 rounded-lg border border-slate-800">
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-1">Ownership Registered Mobile</span>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span className="font-mono text-[#0b1528] font-bold text-sm">+91 8247733059</span>
+                    <span className="font-mono text-white font-bold text-sm">+91 8247733059</span>
                   </div>
                 </div>
 
-                <div className="p-2 bg-emerald-50 text-emerald-800 border border-emerald-150 text-[11px] rounded-lg font-medium flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 shrink-0" /> Dual Verification Protocol is active.
+                <div className="p-2 bg-emerald-950/20 text-emerald-400 border border-emerald-500/15 text-[11px] rounded-lg font-medium flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 shrink-0" /> Dual Verification is active.
                 </div>
               </div>
             </div>
@@ -1134,32 +1125,32 @@ export default function AdminSuite() {
           </div>
 
           {/* PANEL: BOOKINGS MANAGER & LOGS TRAIL */}
-          <div className="lg:col-span-7 bg-white rounded-xl border border-gray-150 p-6 shadow-xs space-y-5 text-left">
+          <div className="lg:col-span-7 bg-slate-900/60 rounded-xl border border-white/5 p-6 shadow-xs space-y-5 text-left">
             
             {/* Active Passes Audit list */}
             <div>
-              <div className="flex justify-between items-center border-b pb-2 mb-3">
-                <span className="font-semibold text-gray-800 font-serif flex items-center gap-1.5 font-bold">
-                  <BookOpen className="w-1.5 h-1.5 rounded-full bg-emerald-600 block shrink-0" /> Tables Booking Passes
+              <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-3">
+                <span className="font-semibold text-white font-serif flex items-center gap-1.5 font-bold">
+                  <BookOpen className="w-1.5 h-1.5 rounded-full bg-emerald-500 block shrink-0" /> Tables Booking Passes
                 </span>
-                <span className="text-[10px] font-mono text-gray-400">Total: {bookings.length} Passes</span>
+                <span className="text-[10px] font-mono text-[#EAC775]">Total: {bookings.length} Passes</span>
               </div>
 
               {bookings.length === 0 ? (
-                <p className="text-xs text-center py-10 text-gray-400 italic">No reservation records in storage grid.</p>
+                <p className="text-xs text-center py-10 text-slate-400 italic">No reservation records in storage grid.</p>
               ) : (
-                <div className="max-h-[190px] overflow-y-auto divide-y divide-gray-100 pr-1">
+                <div className="max-h-[190px] overflow-y-auto divide-y divide-white/5 pr-1 space-y-1">
                   {bookings.map(b => (
-                    <div key={b.code} className="py-2.5 flex justify-between items-center text-xs hover:bg-slate-50 px-1.5 rounded transition">
+                    <div key={b.code} className="py-2.5 flex justify-between items-center text-xs hover:bg-slate-800/40 px-2.5 rounded-xl border border-transparent hover:border-slate-800/60 transition">
                       <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-[11px] font-bold text-gray-900">{b.code}</span>
-                          <span className="text-[10px] text-gray-555 font-bold">{b.name}</span>
-                          <span className="text-[9px] px-1 bg-amber-50 text-amber-80 *0 border-amber-200 border rounded uppercase font-mono">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="font-mono text-[11px] font-bold text-[#EAC775]">{b.code}</span>
+                          <span className="text-[10px] text-slate-100 font-bold">{b.name}</span>
+                          <span className="text-[9px] px-2 py-0.5 bg-red-950/80 text-red-300 border border-red-500/20 rounded uppercase font-mono font-bold">
                             {b.type === "delivery" ? "Delivery/COD" : `${b.guestsCount} heads`}
                           </span>
                         </div>
-                        <span className="text-[10px] text-gray-400 font-mono">Date: {b.date} | Slot: {b.timeSlot} | {b.feedback || "No requests"}</span>
+                        <span className="text-[10px] text-slate-400 font-mono block">Date: {b.date} | Slot: {b.timeSlot} | {b.feedback || "No requests"}</span>
                       </div>
                       
                       <div className="flex gap-1">
@@ -1177,14 +1168,14 @@ export default function AdminSuite() {
                                 loadData();
                               } catch (e) {}
                             }}
-                            className="p-1 px-2 text-[9px] bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-mono font-bold rounded uppercase cursor-pointer"
+                            className="p-1 px-2.5 text-[9px] bg-amber-950/40 hover:bg-amber-950/60 border border-[#EAC775]/20 text-[#EAC775] font-mono font-bold rounded-lg uppercase cursor-pointer transition"
                           >
                             🚚 Dispatch
                           </button>
                         )}
                         <button
                           onClick={() => cancelBookingAdmin(b.code)}
-                          className="p-1 px-2 text-[9px] bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 font-mono font-bold rounded uppercase flex items-center gap-1 transition cursor-pointer"
+                          className="p-1 px-2.5 text-[9px] bg-red-950/40 hover:bg-red-950/60 border border-red-500/20 text-red-400 font-mono font-bold rounded-lg uppercase flex items-center gap-1 transition cursor-pointer"
                         >
                           Archive
                         </button>
@@ -1197,19 +1188,19 @@ export default function AdminSuite() {
 
             {/* audit logs */}
             <div>
-              <div className="flex justify-between items-center border-b pb-2 mb-2">
-                <span className="font-semibold text-gray-800 font-serif flex items-center gap-1.5 font-bold">
+              <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
+                <span className="font-semibold text-white font-serif flex items-center gap-1.5 font-bold">
                   <ScrollText className="w-1.5 h-1.5 rounded-full bg-red-500 block shrink-0" /> Audit Logging Systems
                 </span>
                 <button 
                   onClick={clearAllLogs}
-                  className="text-[10px] font-mono text-gray-400 hover:text-red-500 hover:underline flex items-center gap-1 cursor-pointer"
+                  className="text-[10px] font-mono text-slate-400 hover:text-red-400 hover:underline flex items-center gap-1 cursor-pointer transition"
                 >
                   <Trash2 className="w-3 h-3" /> WIPE
                 </button>
               </div>
 
-              <div className="max-h-[170px] overflow-y-auto bg-slate-900 text-slate-350 p-3.5 rounded-xl font-mono text-[9px] leading-relaxed divide-y divide-white/5 space-y-1">
+              <div className="max-h-[170px] overflow-y-auto bg-black/45 text-slate-350 p-3.5 rounded-xl font-mono text-[9px] leading-relaxed divide-y divide-white/5 space-y-1 border border-white/5">
                 {logs.map((log) => (
                   <div key={log.id} className="pt-1 first:pt-0">
                     <span className="text-[#EAC775] text-[8px] mr-1">[{new Date(log.time).toLocaleTimeString()}]</span>
@@ -1222,7 +1213,7 @@ export default function AdminSuite() {
           </div>
 
         </div>
-      ) : adminActiveTab === "menu" ? (
+      ) : (
         /* PANEL: MENU DATABASE CONFIG EDITOR */
         <div className="space-y-6 text-left">
           
@@ -1545,224 +1536,6 @@ export default function AdminSuite() {
                     </button>
                   </form>
                 </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* PANEL: IMAGE GALLERY MANAGER */
-        <div className="space-y-6">
-          <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs text-left">
-            <div className="border-b pb-3 mb-5">
-              <h3 className="text-lg font-serif font-bold text-[#0b1528] flex items-center gap-2">
-                📸 Moments Gallery & Image Customizer
-              </h3>
-              <p className="text-xs text-gray-500 mt-1 leading-normal font-sans">
-                Type custom titles, write customer stories or captions, and upload real photos of Haveli Banquet Hall & Restaurant. Your updates will sync instantly across the main visual showcases on the home screen.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {galleryPhotos.map((photo, index) => (
-                <div key={photo.id} className="p-4 rounded-xl border border-gray-200 hover:border-[#EAC775] transition-all bg-slate-50 flex flex-col justify-between space-y-4">
-                  <div className="flex gap-4">
-                    {/* Thumbnail preview */}
-                    <div className="aspect-[4/3] w-28 bg-[#12223c]/10 rounded-lg overflow-hidden border border-gray-200 shrink-0">
-                      <img
-                        src={photo.url}
-                        alt={photo.title}
-                        referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-
-                    <div className="space-y-1 flex-1">
-                      <span className="text-[9px] font-mono font-bold text-[#EAC775] uppercase px-2 py-0.5 bg-[#FAF6F0] rounded border border-[#EAC775]/20 inline-block">
-                        Moment Space #{index + 1}
-                      </span>
-                      <h4 className="text-sm font-semibold font-serif text-[#0b1528] truncate mt-1">
-                        {photo.title || "Untitled Moment"}
-                      </h4>
-                      <p className="text-[11px] text-gray-500 line-clamp-2 leading-normal">
-                        {photo.description || "No story description set."}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Metadata Input Forms and Upload Tool */}
-                  <div className="space-y-3 pt-3 border-t border-gray-150">
-                    <div>
-                      <label className="block text-[10px] font-mono uppercase text-[#800E14] font-bold mb-1">
-                        Edit Title / Label
-                      </label>
-                      <input
-                        type="text"
-                        value={photo.title || ""}
-                        onChange={(e) => {
-                          const updated = galleryPhotos.map(p => {
-                            if (p.id === photo.id) {
-                              return { ...p, title: e.target.value };
-                            }
-                            return p;
-                          });
-                          setGalleryPhotos(updated);
-                          safeSaveGallery(updated);
-                          window.dispatchEvent(new Event("haveli_gallery_updated"));
-                        }}
-                        className="w-full p-2 text-xs bg-white border border-gray-200 rounded-lg focus:border-[#800E14] focus:outline-none focus:ring-1 focus:ring-[#800E14]"
-                        placeholder="e.g. Traditional Banquet Dinner Feast"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-mono uppercase text-[#800E14] font-bold mb-1">
-                        Edit Caption / Story description
-                      </label>
-                      <textarea
-                        value={photo.description || ""}
-                        rows={2}
-                        onChange={(e) => {
-                          const updated = galleryPhotos.map(p => {
-                            if (p.id === photo.id) {
-                              return { ...p, description: e.target.value };
-                            }
-                            return p;
-                          });
-                          setGalleryPhotos(updated);
-                          safeSaveGallery(updated);
-                          window.dispatchEvent(new Event("haveli_gallery_updated"));
-                        }}
-                        className="w-full p-2 text-xs bg-white border border-gray-200 rounded-lg focus:border-[#800E14] focus:outline-none focus:ring-1 focus:ring-[#800E14] font-sans"
-                        placeholder="Write a custom note about moments of happiness captured here..."
-                      />
-                    </div>
-
-                    <div className="space-y-1.5 pt-1">
-                      <label className="block text-[10px] font-mono uppercase text-gray-400 font-bold">
-                        Upload Replacement File (Any aspect ratio)
-                      </label>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          id={`file-input-${photo.id}`}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            
-                            // Check for file type
-                            if (!file.type.startsWith("image/")) {
-                              alert("Please select a valid image file.");
-                              return;
-                            }
-
-                            // Process compression using Canvas
-                            compressAndGetBase64(file)
-                              .then((compressedBase64) => {
-                                const updated = galleryPhotos.map(p => {
-                                  if (p.id === photo.id) {
-                                    return { ...p, url: compressedBase64 };
-                                  }
-                                  return p;
-                                });
-                                setGalleryPhotos(updated);
-                                safeSaveGallery(updated);
-                                
-                                // Trigger state update events
-                                window.dispatchEvent(new Event("haveli_gallery_updated"));
-                                appendSystemLog(`System Gallery: Photo #${index + 1} ("${photo.title}") replaced with custom uploaded file.`);
-                                alert(`Photo "${photo.title}" successfully replaced and optimized!`);
-                              })
-                              .catch((err) => {
-                                console.error("Error compressing file:", err);
-                                alert("Failed to compress and load image. Please try another file.");
-                              });
-                          }}
-                          className="hidden"
-                        />
-                        <label
-                          htmlFor={`file-input-${photo.id}`}
-                          className="px-3 py-2 bg-[#0b1528] hover:bg-black text-[10px] font-mono uppercase text-[#EAC775] border border-[#EAC775]/40 rounded-lg cursor-pointer transition text-center hover:shadow flex items-center justify-center gap-1"
-                        >
-                          <Plus className="w-3 h-3" /> Choose Image file
-                        </label>
-                        <button
-                          onClick={() => {
-                            if (window.confirm("Restore this specific photo to its standard baseline placeholder and texts?")) {
-                              const basePhotos = [
-                                {
-                                  id: "g1",
-                                  url: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
-                                  title: "Haveli Grand Royal Banquet Table",
-                                  description: "A breathtaking perspective of our long dining hall table setting, fully adorned with pristine plateware and framed by majestic warm-glowing brick-pillar architectures."
-                                },
-                                {
-                                  id: "g2",
-                                  url: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&q=80",
-                                  title: "Signature Chicken Dum Biryani Platter",
-                                  description: "A luscious high-angle platter layout showcasing steaming bowls of our premium, authentic long-grain aromatic Chicken Dum Biryani cooked under traditional raw pressure."
-                                },
-                                {
-                                  id: "g3",
-                                  url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
-                                  title: "Mandala Heritage Dining Corner",
-                                  description: "An exquisite private seating nook backed by our magnificent, yellow-gold handcrafted floral mandala wood carving and warm historic ambient spotlighting."
-                                },
-                                {
-                                  id: "g4",
-                                  url: "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?w=800&q=80",
-                                  title: "Real Guest Celebrations & Family Feasts",
-                                  description: "Candid moments of our beloved guests sharing joyous stories and celebrating high-quality traditional meals together at our spacious royal banquet tables."
-                                },
-                                {
-                                  id: "g5",
-                                  url: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=800&q=80",
-                                  title: "Our Professional Stewards & Serving Team",
-                                  description: "Meet our smart, courteous, and professionally trained hospitality waiters who stand ready with high pride to serve your family a memorable dining feast."
-                                }
-                              ];
-                              const defaultItem = basePhotos.find(p => p.id === photo.id);
-                              if (defaultItem) {
-                                const updated = galleryPhotos.map(p => {
-                                    if (p.id === photo.id) {
-                                      return { 
-                                        ...p, 
-                                        url: defaultItem.url,
-                                        title: defaultItem.title,
-                                        description: defaultItem.description
-                                      };
-                                    }
-                                    return p;
-                                  });
-                                setGalleryPhotos(updated);
-                                safeSaveGallery(updated);
-                                window.dispatchEvent(new Event("haveli_gallery_updated"));
-                                appendSystemLog(`System Gallery/Moments: Photo #${index + 1} ("${photo.title}") restored to baseline placeholder.`);
-                                alert("Restored to default baseline!");
-                              }
-                            }
-                          }}
-                          className="p-2 border border-red-200 text-red-500 rounded-lg hover:bg-red-50 text-[10px] font-mono uppercase transition cursor-pointer"
-                          title="Restore default"
-                        >
-                          Restore Standard
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Quick Upload Tip Banner */}
-            <div className="mt-8 p-4 bg-[#FAF6F0] rounded-xl border border-[#EAC775]/20 flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-[#EAC775] shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-xs text-[#0b1528] block mb-0.5 font-serif">Quick Display Info</span>
-                <p className="text-[11px] text-gray-500 leading-normal font-sans">
-                  Choose your high-resolution moments images! These photos will display dynamically in any aspect ratio inside the Moments banner on the Homepage.
-                </p>
               </div>
             </div>
 
